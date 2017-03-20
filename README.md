@@ -9,7 +9,7 @@ The library allows Arduino to be client or server on the WiFi network.
 
 ### ESP8266 device
 
-The ESP8266 has two SPI interfaces. The first is connected to the flash memory, the second (named HSPI) can be used by user. The HSPI signals are multiplexed with GPIO12-15. Suitable device for the slave is ESP-12. On the ESP device must be run a custom firmware - see WifiESPSPI project.
+The ESP8266 has two SPI interfaces. The first is connected to the flash memory, the second (named HSPI) can be used by user. The HSPI signals are multiplexed with GPIO12-15. Suitable device for the slave is ESP-12. On the ESP device a custom firmware must be run - see [WifiESPSPI](https://github.com/JiriBilek/WiFiSpiESP) project.
 
 ### Wiring
 
@@ -40,13 +40,13 @@ After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically insta
 - **void init(int8_t pin)**
 Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication.
 
-- **char* firmwareVersion()**
+- **char\* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.
 
-- **uint8_t begin(const char* ssid)**
+- **uint8_t begin(const char\* ssid)**
 Connects to an open (unencrypted) wifi. Returns a value from *wl_status_t* enum(when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
-- **uint8_t begin(const char* ssid, const char *passphrase)**
+- **uint8_t begin(const char\* ssid, const char \*passphrase)**
 Connects to a WPA/WPA2 encrypted wifi. Returns status from *wl_status_t* type (when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
 - **int disconnect(void)**
@@ -55,7 +55,7 @@ Disconnects from the WiFi network. Returns a value from *wl_status_t* enum(when 
 - **uint8_t status()**
 Returns the connection status of the WiFi interface. The returned value is one of the enum *wl_status_t*.
 
-- **int8_t hostByName(const char* aHostname, IPAddress& aResult)**
+- **int8_t hostByName(const char\* aHostname, IPAddress& aResult)**
 Resolves the given hostname to an IP address. Returns 1 for Ok else error code.
 
 ----------
@@ -79,7 +79,7 @@ Changes IP configuration, sets primary DNS server IP address.
 - **bool setDNS(IPAddress dns_server1, IPAddress dns_server2)**
 Changes IP configuration, sets primary and secondary DNS server IP addresses.
 
-- **uint8_t* macAddress(uint8_t* mac)**
+- **uint8_t\* macAddress(uint8_t\* mac)**
 Returns MAC address value of the WiFi interface. The MAC address is copiend to the array *mac* and also returned as a pointer to this array. The array size must be at least 6 bytes.
 
 - **IPAddress localIP()**
@@ -91,10 +91,10 @@ Returns interface subnet mask value.
 - **IPAddress gatewayIP()**
 Returns interface gateway address value.
 
-- **char* SSID()**
+- **char\* SSID()**
 Returns the current SSID associated with the network.
 
-- **uint8_t* BSSID()**
+- **uint8_t\* BSSID()**
 Returns the current BSSID associated with the network. It is in fact the MAC address of the Access Point. Returns a pointer to byte array of 6 byte length.
 
 - **int32_t RSSI()**
@@ -107,10 +107,10 @@ Returns the currect RSSI (signal strength in dBm) as a signed value.
 - **int8_t scanNetworks()**
 Scans the WiFi network. Returns the number of networks found or error value (WL_FAILURE). The call may last several seconds.
 
-- **char* SSID(uint8_t networkItem)**
+- **char\* SSID(uint8_t networkItem)**
 Returns the current SSID associated with the discovered network during the network scan. Parameter *networkItem* is the index into a discovered networks array.
 
-- **uint8_t	encryptionType(uint8_t networkItem)**
+- **uint8_t encryptionType(uint8_t networkItem)**
 Returns the encryption type of the discovered network during the network scan. The returned value is one of the enum *wl_enc_type*. Parameter *networkItem* is the index into a discovered networks array.
 
 - **int32_t RSSI(uint8_t networkItem)**
@@ -130,7 +130,7 @@ Creates client for open server connection. Called by the library in when server 
 - **int connect(IPAddress ip, uint16_t port)**
 Connects to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
-- **int connect(const char *host, uint16_t port)**
+- **int connect(const char \*host, uint16_t port)**
 Connects to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
 - **uint8_t connected()**
@@ -153,7 +153,7 @@ Returns available bytes in the input queue (data received from the network) for 
 - **int read()**
 Reads one byte from the input queue. Returns -1 for an error.
 
-- **int read(uint8_t *buf, size_t size)**
+- **int read(uint8_t \*buf, size_t size)**
 Reads *size* bytes into an input buffer *buf*. Returns 0 on success, -1 on error or insufficient data in the input queue.
 
 - **int peek()**
@@ -162,7 +162,7 @@ Peeks into the input queue and returns the first byte in the queue. On error ret
 - **size_t write(uint8_t)**
 Sends one byte to the network. Returns 1 on success, 0 on error.
 
-- **size_t write(const uint8_t *buf, size_t size)**
+- **size_t write(const uint8_t \*buf, size_t size)**
 Sends the buffer to the network. Returns number of bytes transmitted. Note that on the transmitter side there is usually a buffer so that the data is not guaranteed to be transmit.
 
 ### WiFiSpiServer
@@ -181,14 +181,14 @@ Returns the server's status. Return 1 for opened connection, 0 for closed or err
 - **void stop()**
 Stops the listener, stops the associated client (if any) and frees the socket.
 
-- **WiFiSpiClient available(uint8_t* status = NULL)**
+- **WiFiSpiClient available(uint8_t\* status = NULL)**
 Returns WiFiSpiClient instance for communication with remote client. Returns opened WiFiSpiClient instance when there is a remote client connected. When there is no connection the function returns closed client. Use the WiFiSpiClient's bool operator on the return value to test it.
 When pointer *status* is not null, loads it with the remote client's status.
   
 - **size_t write(uint8_t)**
 Writes a byte to the output queue. Returns 1 on success, 0 on error.
 
-- **size_t write(const uint8_t *buf, size_t size)**
+- **size_t write(const uint8_t \*buf, size_t size)**
 Writes a buffer to the output queue. Returns number of bytes written.
 Note: transmitting data can be also achieved using a WiFiSpiClient object returned by the *WiFiSpiServer::available()* function.
 
@@ -212,10 +212,10 @@ Finishes the packet and sends it. Returns 1 if the packet was sent successfully,
 - **size_t write(uint8_t)**
 Writes a single byte into the packet. Returns 1 on sucesss, 0 on error.
   
-- **size_t write(const uint8_t *buffer, size_t size)**
+- **size_t write(const uint8_t \*buffer, size_t size)**
 Writes *size* bytes from buffer into the packet. Returns number of bytes written, on error returns 0.
  
-- **int parsePacket();**
+- **int parsePacket()**
 Starts processing the next available incoming packet. Returns the size of the packet in bytes, or 0 if no packets are available.
     
 - **int available()**
@@ -224,8 +224,8 @@ Returns the number of bytes remaining in the current packet.
  - **int read()**
 Reads a single byte from the current packet.
 
-- **int read(unsigned char* buffer, size_t len) **
-- **int read(char* buffer, size_t len)**
+- **int read(unsigned char\* buffer, size_t len) **
+- **int read(char\* buffer, size_t len)**
 Reads up to *len* bytes from the current packet and places them into *buffer*. Returns the number of bytes read, or 0 if none are available or an error occurred.
     
 - **int peek()**
