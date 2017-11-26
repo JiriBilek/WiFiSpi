@@ -138,7 +138,7 @@ size_t WiFiSpiUdp::write(const uint8_t *buffer, size_t size)
  */
 int WiFiSpiUdp::parsePacket()
 {
-    return available();
+    return ServerSpiDrv::parsePacket(_sock);
 }
 
 /*

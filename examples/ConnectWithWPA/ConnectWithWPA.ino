@@ -53,7 +53,7 @@ void setup() {
   }
 
   String fv = WiFiSpi.firmwareVersion();
-  if (fv != "0.1.0") {
+  if (fv != "0.1.1") {
     Serial.println("Please upgrade the firmware");
   }
 

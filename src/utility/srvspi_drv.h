@@ -63,6 +63,7 @@ public:
 
     static bool beginUdpPacket(uint32_t ip, uint16_t port, uint8_t sock);
 
+    static uint16_t parsePacket(const uint8_t sock);
 };
 
 #endif

@@ -343,3 +343,24 @@ bool ServerSpiDrv::beginUdpPacket(uint32_t ipAddress, uint16_t port, uint8_t soc
     return (_data == 1);  // return value 1 means ok
 }
 
+/*
+ * 
+ */
+uint16_t ServerSpiDrv::parsePacket(const uint8_t sock)
+{
+    // Send Command
+    EspSpiDrv::sendCmd(UDP_PARSE_PACKET_CMD, PARAM_NUMS_1);
+    EspSpiDrv::sendParam(sock);
+    EspSpiDrv::endCmd();
+
+    // Wait for reply
+    uint16_t _data16;
+    uint8_t _dataLen = sizeof(_data16);
+    if (!EspSpiDrv::waitResponseCmd(UDP_PARSE_PACKET_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
+    {
+        WARN(F("error waitResponse"));
+        _data16 = 0;
+    }
+
+    return _data16;
+}

@@ -216,7 +216,7 @@ Writes a single byte into the packet. Returns 1 on sucesss, 0 on error.
 Writes *size* bytes from buffer into the packet. Returns number of bytes written, on error returns 0.
  
 - **int parsePacket()**
-Starts processing the next available incoming packet. Returns the size of the packet in bytes, or 0 if no packets are available.
+Starts processing the next available incoming packet. Discards an old packet if present. Returns the size of the packet in bytes, or 0 if no packets are available.
     
 - **int available()**
 Returns the number of bytes remaining in the current packet.

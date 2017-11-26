@@ -62,6 +62,7 @@ public:
     using Print::write;
 
     // Start processing the next available incoming packet
+    // Discards current packet, if any is present!
     // Returns the size of the packet in bytes, or 0 if no packets are available
     virtual int parsePacket();
   

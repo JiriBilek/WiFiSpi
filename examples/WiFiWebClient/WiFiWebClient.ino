@@ -19,7 +19,7 @@
      12       D6      MISO  |   D12
      14       D5      SCK   |   D13
 
-    Note: If the ESP is booting at a moment when the SPI Master (i.e. Arduino) has the Select line HIGH (deselected)
+    Note: If the ESP is booting at the moment when the SPI Master (i.e. Arduino) has the Select line HIGH (deselected)
     the ESP8266 WILL FAIL to boot!
     
  original sketch for WiFi library created 13 July 2010
@@ -66,7 +66,7 @@ void setup() {
   }
 
   String fv = WiFiSpi.firmwareVersion();
-  if (fv != "0.1.0") {
+  if (fv != "0.1.1") {
     Serial.println("Please upgrade the firmware");
   }
 

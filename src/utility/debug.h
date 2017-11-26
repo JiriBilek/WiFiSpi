@@ -64,8 +64,12 @@
 #define WARN(args) do { PRINT_FILE_LINE()			\
 		Serial.print("-W-"); Serial.println(args);	\
 }while (0);
+#define WARN2(arg1,args) do { PRINT_FILE_LINE()			\
+		Serial.print("-W-"); Serial.print(arg1); Serial.println(args);	\
+}while (0);
 #else
 #define WARN(args) do {} while (0);
+#define WARN2(arg1,args) do {} while (0);
 #endif
 
 #endif

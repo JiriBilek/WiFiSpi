@@ -227,7 +227,7 @@ public:
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave rx is not ready");
-        Serial.print("Returning: ");  Serial.println(status >> 28);
+        WARN2("Returning: ", status >> 28);
         
         return (status >> 28);  // timeout
     }
@@ -253,7 +253,7 @@ public:
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave tx is not ready");
-        Serial.print("Returning: ");  Serial.println((status >> 24) & 0x0f);
+        WARN2("Returning: ", (status >> 24) & 0x0f);
         
         return ((status >> 24) & 0x0f);  // timeout
     }
