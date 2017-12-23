@@ -1,4 +1,4 @@
-WiFiSpi
+WiFiSpi [![Build Status](https://travis-ci.org/JiriBilek/WiFiSpi.svg?branch=master)](https://travis-ci.org/JiriBilek/WiFiSpi)
 =======
 
 This library connects Arduino to ESP8266 module and uses it as a dedicated WiFi device. The SPI interface is used because of its strictly master/slave nature.
