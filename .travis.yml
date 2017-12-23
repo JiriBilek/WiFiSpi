@@ -13,7 +13,7 @@ install:
   - ln -s $PWD /usr/local/share/arduino/libraries/WiFiSpi
   
 script:
-  - arduino --verify --board ${BOARD} $PWD/examples/examples/ConnectWithWPA/ConnectWithWPA.ino
+  - arduino --verify --board ${BOARD} $PWD/examples/ConnectWithWPA/ConnectWithWPA.ino
   
 notifications:
   email:
