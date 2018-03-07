@@ -60,7 +60,7 @@ extern "C" {
 class WiFiSpiClass
 {
 public:
-    static void init(int8_t pin = -1);
+    static void init(int8_t pin = -1, uint32_t max_speed = 0);
 
 private:
     static int16_t 	_state[MAX_SOCK_NUM];

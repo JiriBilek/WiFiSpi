@@ -97,8 +97,7 @@ public:
     {
         _ss_pin = pin;
         pinMode(_ss_pin, OUTPUT);
-        _pulseSS();
-        // TODO: Isn't LOW just enough?
+        digitalWrite(_ss_pin, LOW);
     }
 
     uint32_t readStatus()

@@ -39,7 +39,7 @@ WiFiSpiClass::WiFiSpiClass()
 {
 }
 
-void WiFiSpiClass::init(int8_t pin)
+void WiFiSpiClass::init(int8_t pin, uint32_t max_speed)
 {
     // Initialize the connection arrays
     for (uint8_t i = 0; i < MAX_SOCK_NUM; ++i)
@@ -51,7 +51,7 @@ void WiFiSpiClass::init(int8_t pin)
     if (pin < 0)
         pin = SS;
         
-    WiFiSpiDrv::wifiDriverInit(pin);
+    WiFiSpiDrv::wifiDriverInit(pin, max_speed);
 }
 
 uint8_t WiFiSpiClass::getSocket()

@@ -1,7 +1,5 @@
-0.1.1 (2017-11-26)
-  * Fixed UDP communication
-  * Removed some testing prints
-  * Added examples for NTP and MQTT connection
-  
+0.1.1 (2018-07-03)
+  * Added parameter to init function (SPI max speed)
+  * Enabled STM32F1 architecture although there will be a lot of work yet
 0.1.0 (2017-03-14)
   * First version for testing
