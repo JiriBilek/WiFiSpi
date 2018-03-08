@@ -67,6 +67,9 @@ enum {
 #define SLAVE_RX_READY_TIMEOUT     3000UL
 #define SLAVE_TX_READY_TIMEOUT     3000UL
 
+// How long will be SS held high when starting transmission
+#define SS_PULSE_DELAY_MICROSECONDS   5
+
 
 class EspSpiProxy
 {
@@ -83,8 +86,9 @@ private:
         if (_ss_pin >= 0)
         {
             digitalWrite(_ss_pin, HIGH);
-            delayMicroseconds(5);
+            delayMicroseconds(SS_PULSE_DELAY_MICROSECONDS);
             digitalWrite(_ss_pin, LOW);
+            delayMicroseconds(SS_PULSE_DELAY_MICROSECONDS);  // Added as an attempt to solve false messages
         }
     }
     
@@ -130,7 +134,7 @@ public:
         spi_obj->transfer(CMD_READDATA);
         spi_obj->transfer(0x00);
         for(uint8_t i=0; i<32; i++) {
-            buf[i] = spi_obj->transfer(0);
+            buf[i] = spi_obj->transfer(1);  // the value is not important
         }
         _pulseSS();
     }

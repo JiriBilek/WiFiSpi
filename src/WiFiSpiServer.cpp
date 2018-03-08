@@ -62,7 +62,7 @@ WiFiSpiClient WiFiSpiServer::available(uint8_t* status)
     WiFiSpiClient client(_sock);
 
     uint8_t _client_status = client.status();  // creates Client object on ESP side if there is established connection
-    uint8_t _server_status = this->status();
+//    uint8_t _server_status = this->status();  removed, may be related with the comment below, running fine without it 
 
     if (status != NULL)
         *status = _client_status;
