@@ -81,7 +81,7 @@ public:
     /*
      * Driver initialization, pin is GPIO port number used as SS
      */
-    static void wifiDriverInit(SPIClass *in_spi, uint8_t pin, uint32_t max_speed = 0);
+    static void wifiDriverInit(uint8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
 
     /*
      * Set the desired network which the connection manager should try to

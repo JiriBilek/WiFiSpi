@@ -95,7 +95,7 @@ public:
        buflen = 0;
     }
 
-    void begin(SPIClass *in_spi, uint8_t pin)
+    void begin(uint8_t pin, SPIClass *in_spi)
     {
         spi_obj = in_spi;
 
@@ -227,6 +227,7 @@ public:
             if (((status >> 28) == SPISLAVE_RX_READY))
                 return (status >> 28);  // status
             
+            yield();
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave rx is not ready");
@@ -252,7 +253,8 @@ public:
 
             if ((((status >> 24) & 0x0f) == SPISLAVE_TX_READY))
                 return ((status >> 24) & 0x0f);  // status
-            
+
+            yield();
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave tx is not ready");

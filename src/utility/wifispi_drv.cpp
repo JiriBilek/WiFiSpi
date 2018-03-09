@@ -128,7 +128,7 @@ bool WiFiSpiDrv::getRemoteData(uint8_t sock, uint8_t *ip, uint16_t *port)
 /*
  * 
  */
-void WiFiSpiDrv::wifiDriverInit(SPIClass *in_spi, uint8_t pin, uint32_t max_speed)
+void WiFiSpiDrv::wifiDriverInit(uint8_t pin, uint32_t max_speed, SPIClass *in_spi)
 {
     spi_obj = in_spi;
     spi_obj->begin();
@@ -136,7 +136,7 @@ void WiFiSpiDrv::wifiDriverInit(SPIClass *in_spi, uint8_t pin, uint32_t max_spee
     if (max_speed != 0)
         spi_obj->beginTransaction(SPISettings(max_speed, MSBFIRST, SPI_MODE0));
     
-    espSpiProxy.begin(spi_obj, pin);
+    espSpiProxy.begin(pin, spi_obj);
 }
 
 /*
