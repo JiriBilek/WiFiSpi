@@ -60,17 +60,13 @@ extern "C" {
 class WiFiSpiClass
 {
 public:
-<<<<<<< Upstream, based on master
-    static void init(int8_t pin = -1, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
-=======
     /*
      * Initialization of the library.
      *
      * param pin: SS pin, default value get default pin
      * param max_speed: maximum speed of SPI interface
      */
-    static void init(int8_t pin = -1, uint32_t max_speed = 0);
->>>>>>> 3c27261 Added softReset command and protocol version
+    static void init(int8_t pin = -1, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
 
 private:
     static int16_t 	_state[MAX_SOCK_NUM];
