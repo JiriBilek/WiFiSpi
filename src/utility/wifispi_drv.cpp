@@ -38,6 +38,8 @@ extern "C" {
 #include "debug.h"
 }
 
+SPIClass *WiFiSpiDrv::spi_obj;
+
 // Array of data to cache the information related to the networks discovered
 char 	WiFiSpiDrv::_networkSsid[] = {0};
 int32_t WiFiSpiDrv::_networkRssi = 0;
@@ -126,14 +128,15 @@ bool WiFiSpiDrv::getRemoteData(uint8_t sock, uint8_t *ip, uint16_t *port)
 /*
  * 
  */
-void WiFiSpiDrv::wifiDriverInit(uint8_t pin, uint32_t max_speed)
+void WiFiSpiDrv::wifiDriverInit(SPIClass *in_spi, uint8_t pin, uint32_t max_speed)
 {
-    SPI.begin();
+    spi_obj = in_spi;
+    spi_obj->begin();
 
     if (max_speed != 0)
-        SPI.beginTransaction(SPISettings(max_speed, MSBFIRST, SPI_MODE0));
+        spi_obj->beginTransaction(SPISettings(max_speed, MSBFIRST, SPI_MODE0));
     
-    espSpiProxy.begin(pin);
+    espSpiProxy.begin(spi_obj, pin);
 }
 
 /*
