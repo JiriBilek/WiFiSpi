@@ -28,6 +28,7 @@
 #include <inttypes.h>
 #include "wifi_spi.h"
 #include "IPAddress.h"
+#include <SPI.h>
 
 // Key index length
 ///#define KEY_IDX_LEN     1
@@ -42,6 +43,9 @@
 class WiFiSpiDrv
 {
 private:
+    // SPI object
+    static SPIClass *spi_obj;
+
 	// settings of requested network
 	static char 	_networkSsid[WL_SSID_MAX_LENGTH];
 	static int32_t 	_networkRssi;
@@ -77,7 +81,7 @@ public:
     /*
      * Driver initialization, pin is GPIO port number used as SS
      */
-    static void wifiDriverInit(uint8_t pin, uint32_t max_speed = 0);
+    static void wifiDriverInit(uint8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
 
     /*
      * Set the desired network which the connection manager should try to

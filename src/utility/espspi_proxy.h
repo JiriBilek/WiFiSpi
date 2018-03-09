@@ -71,6 +71,8 @@ enum {
 class EspSpiProxy
 {
 private:
+    SPIClass *spi_obj;
+
     uint8_t _ss_pin;
     uint8_t buffer[32];
     uint8_t buflen;
@@ -93,8 +95,10 @@ public:
        buflen = 0;
     }
 
-    void begin(uint8_t pin)
+    void begin(uint8_t pin, SPIClass *in_spi)
     {
+        spi_obj = in_spi;
+
         _ss_pin = pin;
         pinMode(_ss_pin, OUTPUT);
         digitalWrite(_ss_pin, LOW);
@@ -103,8 +107,8 @@ public:
     uint32_t readStatus()
     {
         _pulseSS();
-        SPI.transfer(CMD_READSTATUS);
-        uint32_t status = (SPI.transfer(0) | ((uint32_t)(SPI.transfer(0)) << 8) | ((uint32_t)(SPI.transfer(0)) << 16) | ((uint32_t)(SPI.transfer(0)) << 24));
+        spi_obj->transfer(CMD_READSTATUS);
+        uint32_t status = (spi_obj->transfer(0) | ((uint32_t)(spi_obj->transfer(0)) << 8) | ((uint32_t)(spi_obj->transfer(0)) << 16) | ((uint32_t)(spi_obj->transfer(0)) << 24));
         _pulseSS();
         return status;
     }
@@ -112,21 +116,21 @@ public:
     void writeStatus(uint32_t status)
     {
         _pulseSS();
-        SPI.transfer(CMD_WRITESTATUS);
-        SPI.transfer(status & 0xFF);
-        SPI.transfer((status >> 8) & 0xFF);
-        SPI.transfer((status >> 16) & 0xFF);
-        SPI.transfer((status >> 24) & 0xFF);
+        spi_obj->transfer(CMD_WRITESTATUS);
+        spi_obj->transfer(status & 0xFF);
+        spi_obj->transfer((status >> 8) & 0xFF);
+        spi_obj->transfer((status >> 16) & 0xFF);
+        spi_obj->transfer((status >> 24) & 0xFF);
         _pulseSS();
     }
 
     void readData(uint8_t* buf)
     {
         _pulseSS();
-        SPI.transfer(CMD_READDATA);
-        SPI.transfer(0x00);
+        spi_obj->transfer(CMD_READDATA);
+        spi_obj->transfer(0x00);
         for(uint8_t i=0; i<32; i++) {
-            buf[i] = SPI.transfer(0);
+            buf[i] = spi_obj->transfer(0);
         }
         _pulseSS();
     }
@@ -135,13 +139,13 @@ public:
     {
         uint8_t i=0;
         _pulseSS();
-        SPI.transfer(CMD_WRITEDATA);
-        SPI.transfer(0x00);
+        spi_obj->transfer(CMD_WRITEDATA);
+        spi_obj->transfer(0x00);
         while(len-- && i < 32) {
-            SPI.transfer(data[i++]);
+            spi_obj->transfer(data[i++]);
         }
         while(i++ < 32) {
-            SPI.transfer(0);
+            spi_obj->transfer(0);
         }
         _pulseSS();
     }
@@ -223,6 +227,7 @@ public:
             if (((status >> 28) == SPISLAVE_RX_READY))
                 return (status >> 28);  // status
             
+            yield();
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave rx is not ready");
@@ -248,7 +253,8 @@ public:
 
             if ((((status >> 24) & 0x0f) == SPISLAVE_TX_READY))
                 return ((status >> 24) & 0x0f);  // status
-            
+
+            yield();
         } while ((millis() & 0x0fffffff) < endTime);
 
         WARN("Slave tx is not ready");
