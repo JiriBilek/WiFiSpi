@@ -17,13 +17,13 @@ The library uses hardware SPI on Arduino so most of the signals are fixed to cer
 
 The wiring is as follows:
 
-     Name  |   Uno   | STM32F1 |     ESP8266
-           |         |         |  GPIO    NodeMCU
-    -------+---------+-----------------------------
-      SS   |   D10   |   PA4   |   15       D8
-     MOSI  |   D11   |   PA7   |   13       D7
-     MISO  |   D12   |   PA6   |   12       D6
-     SCK   |   D13   |   PA5   |   14       D5
+     Name  |   Uno   | STM32F103C8 |     ESP8266
+           |         |  SPI1 SPI2  |  GPIO    NodeMCU
+    -------+---------+---------------------------------
+      SS   |   D10   |  PA4  PB12  |   15       D8
+     MOSI  |   D11   |  PA7  PB15  |   13       D7
+     MISO  |   D12   |  PA6  PB14  |   12       D6
+     SCK   |   D13   |  PA5  PB13  |   14       D5
 
 The SS pin is the only pin the user can change. Changing SS to another pin enables more devices on one SPI interface.
 
@@ -37,8 +37,8 @@ The library implements almost the same functions as the [Arduino WiFi library](h
 
 After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically instantiated. Use the variable to perform the following calls.
 
-- **void init(int8_t pin, uint32_t max_speed = 0)**
-Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter max_speed limits the SPI speed. Recent tests on STM32F1 show that faster speeds than 1000000 are unreliable. Maybe affected by bad wiring on testing breadboard.
+- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI)**
+Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter max_speed limits the SPI speed. Recent tests on STM32F1 show that faster speeds than 1000000 are unreliable. Maybe affected by bad wiring on testing breadboard. The parameter in_spi allows to use another SPI port (if there are more in the MCU). Refer to a particular implementation of SPIClass.
 
 - **char* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.

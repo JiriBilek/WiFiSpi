@@ -36,6 +36,8 @@
 #define WL_DELAY_START_CONNECTION 5000
 // Firmware version string length (format a.b.c)
 #define WL_FW_VER_LENGTH 6
+// Protocol version string length (format a.b.c)
+#define WL_PROTOCOL_VER_LENGTH 6
 
 #define DUMMY_DATA  0xFF
 
@@ -53,6 +55,8 @@ private:
 
 	// firmware version string in the format a.b.c
 	static char 	fwVersion[WL_FW_VER_LENGTH];
+	// protocol version string in the format a.b.c
+	static char 	protocolVersion[WL_PROTOCOL_VER_LENGTH];
 
 	// settings of current selected network
 	static char 	_ssid[WL_SSID_MAX_LENGTH];
@@ -272,6 +276,20 @@ public:
      * Get remote Data information on UDP socket
      */
     static bool getRemoteData(uint8_t sock, uint8_t *ip, uint16_t *port);
+
+    /*
+     * Perform software reset of the ESP8266 module. 
+     * The reset succeedes only if the SPI communication is not broken.
+     * After the reset wait for the ESP8266 to came to life again. Typically, the ESP8266 boots within 100 ms,
+     * but with the WifiManager installed on ESP it can be a couple of seconds.
+     */
+    static void softReset(void);
+
+    /*
+     * Get the SPI protocol version
+     * result: version as string with this format a.b.c
+     */
+    static char* getProtocolVersion();
 
 };
 

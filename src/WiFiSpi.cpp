@@ -333,5 +333,23 @@ int8_t WiFiSpiClass::hostByName(const char* aHostname, IPAddress& aResult)
 	return WiFiSpiDrv::getHostByName(aHostname, aResult);
 }
 
+/*
+ * Perform remote software reset of the ESP8266 module. 
+ * The reset succeedes only if the SPI communication is not broken.
+ * The function does not wait for the ESP8266.
+ */
+void WiFiSpiClass::softReset(void) {
+    WiFiSpiDrv::softReset();
+}
+
+/*
+ * 
+ */
+char* WiFiSpiClass::protocolVersion()
+{
+    return WiFiSpiDrv::getProtocolVersion();
+}
+
+
 WiFiSpiClass WiFiSpi;
 

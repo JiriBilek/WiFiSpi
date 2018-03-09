@@ -75,6 +75,9 @@ enum {
     GET_SCANNED_DATA_CMD     = 0x3C,
     BEGIN_UDP_PACKET_CMD     = 0x3D,
     UDP_PARSE_PACKET_CMD     = 0x3E,
+    SOFTWARE_RESET_CMD       = 0x3F,
+
+    GET_PROTOCOL_VERSION_CMD = 0x50,
 
     // All command with DATA_FLAG 0x40 send a 16bit Len
 

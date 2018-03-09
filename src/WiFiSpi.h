@@ -60,7 +60,17 @@ extern "C" {
 class WiFiSpiClass
 {
 public:
+<<<<<<< Upstream, based on master
     static void init(int8_t pin = -1, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
+=======
+    /*
+     * Initialization of the library.
+     *
+     * param pin: SS pin, default value get default pin
+     * param max_speed: maximum speed of SPI interface
+     */
+    static void init(int8_t pin = -1, uint32_t max_speed = 0);
+>>>>>>> 3c27261 Added softReset command and protocol version
 
 private:
     static int16_t 	_state[MAX_SOCK_NUM];
@@ -263,6 +273,20 @@ public:
      *          else error code
      */
     int8_t hostByName(const char* aHostname, IPAddress& aResult);
+
+    /*
+     * Perform software reset of the ESP8266 module. 
+     * The reset succeedes only if the SPI communication is not broken.
+     * After the reset wait for the ESP8266 to came to life again. Typically, the ESP8266 boots within 100 ms,
+     * but with the WifiManager installed on ESP it can be a couple of seconds.
+     */
+    void softReset(void);
+    
+    /*
+     * Get protocol version
+     */
+    static char* protocolVersion();
+
 
     /*
      * The following classes need r/w access to private arrays

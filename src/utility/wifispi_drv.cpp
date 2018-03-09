@@ -53,8 +53,9 @@ uint8_t WiFiSpiDrv::_localIp[] = {0};
 uint8_t WiFiSpiDrv::_subnetMask[] = {0};
 uint8_t WiFiSpiDrv::_gatewayIp[] = {0};
 
-// Firmware version
+// Firmware and protocol version
 char    WiFiSpiDrv::fwVersion[] = {0};
+char    WiFiSpiDrv::protocolVersion[] = {0};
 
 
 // Private Methods
@@ -512,6 +513,42 @@ char* WiFiSpiDrv::getFwVersion()
 
     return fwVersion;
 }
+
+/*
+ * Perform remote software reset of the ESP8266 module. 
+ * The reset succeedes only if the SPI communication is not broken.
+ * The function does not wait for the ESP8266.
+ */
+void WiFiSpiDrv::softReset(void) {
+    // Send Command
+    EspSpiDrv::sendCmd(SOFTWARE_RESET_CMD, PARAM_NUMS_0);
+
+    // Wait for reply
+    uint8_t _dataLen = WL_FW_VER_LENGTH;
+    if (!EspSpiDrv::waitResponseCmd(SOFTWARE_RESET_CMD, PARAM_NUMS_0, NULL, NULL))
+    {
+        WARN(F("error waitResponse"));
+    }
+}
+
+/*
+ * 
+ */
+char* WiFiSpiDrv::getProtocolVersion()
+{
+    // Send Command
+    EspSpiDrv::sendCmd(GET_PROTOCOL_VERSION_CMD, PARAM_NUMS_0);
+
+    // Wait for reply
+    uint8_t _dataLen = WL_PROTOCOL_VER_LENGTH;
+    if (!EspSpiDrv::waitResponseCmd(GET_PROTOCOL_VERSION_CMD, PARAM_NUMS_1, (uint8_t*)protocolVersion, &_dataLen))
+    {
+        WARN(F("error waitResponse"));
+    }
+
+    return protocolVersion;
+}
+
 
 WiFiSpiDrv wiFiSPIDrv;
 
