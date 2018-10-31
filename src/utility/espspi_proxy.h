@@ -68,7 +68,7 @@ enum {
 #define SLAVE_TX_READY_TIMEOUT     3000UL
 
 // How long will be SS held high when starting transmission
-#define SS_PULSE_DELAY_MICROSECONDS   5
+#define SS_PULSE_DELAY_MICROSECONDS   50
 
 
 class EspSpiProxy
@@ -81,14 +81,22 @@ private:
     uint8_t buflen;
     uint8_t bufpos;
     
-    void _pulseSS()
+    void _pulseSS(boolean start)
     {
         if (_ss_pin >= 0)
         {
-            digitalWrite(_ss_pin, HIGH);
-            delayMicroseconds(SS_PULSE_DELAY_MICROSECONDS);
-            digitalWrite(_ss_pin, LOW);
-            delayMicroseconds(SS_PULSE_DELAY_MICROSECONDS);  // Added as an attempt to solve false messages
+            if (start) {  // tested ok: 5, 15 / 5
+                digitalWrite(_ss_pin, HIGH);
+                delayMicroseconds(1);
+                
+                digitalWrite(_ss_pin, LOW);
+                delayMicroseconds(15);  // 10us is low (some errors), 20 us is safe (no errors)
+            }
+            else {
+                digitalWrite(_ss_pin, HIGH);
+                delayMicroseconds(1);
+                digitalWrite(_ss_pin, LOW);
+            }
         }
     }
     
@@ -110,39 +118,47 @@ public:
 
     uint32_t readStatus()
     {
-        _pulseSS();
+        _pulseSS(true);
+
         spi_obj->transfer(CMD_READSTATUS);
         uint32_t status = (spi_obj->transfer(0) | ((uint32_t)(spi_obj->transfer(0)) << 8) | ((uint32_t)(spi_obj->transfer(0)) << 16) | ((uint32_t)(spi_obj->transfer(0)) << 24));
-        _pulseSS();
+        
+        _pulseSS(false);
+
         return status;
     }
 
     void writeStatus(uint32_t status)
     {
-        _pulseSS();
+        _pulseSS(true);
+
         spi_obj->transfer(CMD_WRITESTATUS);
         spi_obj->transfer(status & 0xFF);
         spi_obj->transfer((status >> 8) & 0xFF);
         spi_obj->transfer((status >> 16) & 0xFF);
         spi_obj->transfer((status >> 24) & 0xFF);
-        _pulseSS();
+
+        _pulseSS(false);
     }
 
     void readData(uint8_t* buf)
     {
-        _pulseSS();
+        _pulseSS(true);
+
         spi_obj->transfer(CMD_READDATA);
         spi_obj->transfer(0x00);
         for(uint8_t i=0; i<32; i++) {
-            buf[i] = spi_obj->transfer(1);  // the value is not important
+            buf[i] = spi_obj->transfer(0);  // the value is not important
         }
-        _pulseSS();
+
+        _pulseSS(false);
     }
 
     void writeData(uint8_t * data, size_t len)
     {
         uint8_t i=0;
-        _pulseSS();
+        _pulseSS(true);
+        
         spi_obj->transfer(CMD_WRITEDATA);
         spi_obj->transfer(0x00);
         while(len-- && i < 32) {
@@ -151,7 +167,8 @@ public:
         while(i++ < 32) {
             spi_obj->transfer(0);
         }
-        _pulseSS();
+
+        _pulseSS(false);
     }
 
 
