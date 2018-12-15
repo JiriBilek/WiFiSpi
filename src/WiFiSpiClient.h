@@ -37,6 +37,8 @@ private:
     uint8_t _sock;   //not used
     uint16_t  _socket;
 
+    int availData = 0;
+
 public:
     WiFiSpiClient();
     WiFiSpiClient(uint8_t sock);

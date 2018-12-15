@@ -1,3 +1,4 @@
+
 /*
   WiFiSpiClient.cpp - Library for Arduino SPI connection to ESP8266
   Copyright (c) 2017 Jiri Bilek. All rights reserved.
@@ -109,8 +110,10 @@ int WiFiSpiClient::available()
 {
     if (_sock == SOCK_NOT_AVAIL)
         return 0;
-    else
-        return ServerSpiDrv::availData(_sock);
+    if (availData == 0) {
+      availData = ServerSpiDrv::availData(_sock);
+    }
+    return availData;
 }
 
 /*
@@ -120,6 +123,9 @@ int WiFiSpiClient::read()
 {
     int16_t b;
     ServerSpiDrv::getData(_sock, &b);  // returns -1 when error
+    if (availData > 0) {
+      availData--;
+    }
     return b;
 }
 
@@ -132,9 +138,16 @@ int WiFiSpiClient::read(uint8_t* buf, size_t size) {
     // sizeof(size_t) is architecture dependent
     // but we need a 16 bit data type here
     uint16_t _size = size;
+    if (_size > availData) {
+      _size = availData; // patch, because firmware doesn't really send _size
+    }
     if (!ServerSpiDrv::getDataBuf(_sock, buf, &_size))
         return -1;
-    return 0;
+    availData -= _size;
+    if (availData < 0) {
+      availData = 0;
+    }
+    return _size;
 }
 
 /*
@@ -161,6 +174,8 @@ void WiFiSpiClient::stop() {
   if (_sock == SOCK_NOT_AVAIL)
     return;
     
+  availData = 0;
+
   ServerSpiDrv::stopClient(_sock);
 
   int count = 0;
@@ -180,7 +195,7 @@ uint8_t WiFiSpiClient::connected()
     if (_sock == SOCK_NOT_AVAIL)
         return 0;
     else    
-        return (status() == ESTABLISHED);
+        return (availData > 0 || status() == ESTABLISHED);
 }
 
 /*
