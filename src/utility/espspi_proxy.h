@@ -87,14 +87,14 @@ private:
         {
             if (start) {  // tested ok: 5, 15 / 5
                 digitalWrite(_ss_pin, HIGH);
-                delayMicroseconds(1);
+                delayMicroseconds(5);
                 
                 digitalWrite(_ss_pin, LOW);
-                delayMicroseconds(15);  // 10us is low (some errors), 20 us is safe (no errors)
+                delayMicroseconds(20);  // 10us is low (some errors), 15 is ok, 25 us is safe for speeds > 4MHz
             }
             else {
                 digitalWrite(_ss_pin, HIGH);
-                delayMicroseconds(1);
+                delayMicroseconds(5);
                 digitalWrite(_ss_pin, LOW);
             }
         }
@@ -113,7 +113,7 @@ public:
 
         _ss_pin = pin;
         pinMode(_ss_pin, OUTPUT);
-        digitalWrite(_ss_pin, LOW);
+        digitalWrite(_ss_pin, LOW);  // Safe value for ESP8266 GPIO15 
     }
 
     uint32_t readStatus()
