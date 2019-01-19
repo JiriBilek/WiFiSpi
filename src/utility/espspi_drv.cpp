@@ -49,6 +49,8 @@
   |___________|______|______|_________|___________|________|____|_________|
   |   8 bit   | 1bit | 7bit |  8bit   |   8bit    | nbytes | .. |   8bit  |
   |___________|______|______|_________|___________|________|____|_________|
+
+  The last byte (position 31) is crc8.
 */
 void EspSpiDrv::sendCmd(const uint8_t cmd, const uint8_t numParam)
 {

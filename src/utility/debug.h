@@ -28,12 +28,19 @@
 #ifndef _DEBUG_H_INCLUDED
 #define _DEBUG_H_INCLUDED
 
+#define _DEBUG_
+
+#define DBGOUT  Serial
+
 #include <stdio.h>
 #include <string.h>
 
+const char *DbgFileName(const char *s);
+
+
 #define PRINT_FILE_LINE() do { 						\
-		Serial.print("[");Serial.print(__FILE__);		\
-		Serial.print("::");Serial.print(__LINE__);Serial.print("]");\
+		DBGOUT.print("[");DBGOUT.print(DbgFileName(__FILE__));		\
+		DBGOUT.print(":");DBGOUT.print(__LINE__);DBGOUT.print("]");\
 }while (0);
 
 #ifdef _DEBUG_
@@ -41,16 +48,16 @@
 #define INFO(format, args...) do { \
 	char buf[250];	\
 	sprintf(buf, format, args); \
-	Serial.println(buf); \
+	DBGOUT.println(buf); \
 } while(0);
 
-#define INFO1(x) do { PRINT_FILE_LINE() Serial.print("-I-");\
-		Serial.println(x);    			\
+#define INFO1(x) do { PRINT_FILE_LINE() DBGOUT.print(" I: ");\
+		DBGOUT.println(x);    			\
 }while (0);
 
 
-#define INFO2(x,y) do { PRINT_FILE_LINE() Serial.print("-I-");\
-		Serial.print(x,16);Serial.print(",");Serial.println(y,16); \
+#define INFO2(x,y) do { PRINT_FILE_LINE() DBGOUT.print(" I: ");\
+		DBGOUT.print(x,16);DBGOUT.print(",");DBGOUT.println(y,16); \
 }while (0);
 
 
@@ -62,10 +69,10 @@
 
 #ifdef _DEBUG_
 #define WARN(args) do { PRINT_FILE_LINE()			\
-		Serial.print("-W-"); Serial.println(args);	\
+		DBGOUT.print(" W: "); DBGOUT.println(args);	\
 }while (0);
 #define WARN2(arg1,args) do { PRINT_FILE_LINE()			\
-		Serial.print("-W-"); Serial.print(arg1); Serial.println(args);	\
+		DBGOUT.print(" W: "); DBGOUT.print(arg1); DBGOUT.println(args);	\
 }while (0);
 #else
 #define WARN(args) do {} while (0);
