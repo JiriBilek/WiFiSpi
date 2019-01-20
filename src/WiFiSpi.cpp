@@ -31,6 +31,9 @@ extern "C" {
 ///  #include "utility/debug.h"
 }
 
+// Protocol version
+const char *WiFiSpiClass::protocolVer = "0.2.0";
+
 // No assumptions about the value of MAX_SOCK_NUM
 int16_t 	WiFiSpiClass::_state[MAX_SOCK_NUM];
 uint16_t 	WiFiSpiClass::_server_port[MAX_SOCK_NUM];
@@ -67,7 +70,7 @@ uint8_t WiFiSpiClass::getSocket()
 /*
  * 
  */
-char* WiFiSpiClass::firmwareVersion()
+const char* WiFiSpiClass::firmwareVersion()
 {
     return WiFiSpiDrv::getFwVersion();
 }
@@ -345,11 +348,31 @@ void WiFiSpiClass::softReset(void) {
 /*
  * 
  */
-char* WiFiSpiClass::protocolVersion()
+const char* WiFiSpiClass::protocolVersion()
 {
     return WiFiSpiDrv::getProtocolVersion();
 }
 
+/*
+ *
+ */
+const char* WiFiSpiClass::masterProtocolVersion() 
+{
+    return protocolVer;
+}
+
+/*
+ *
+ */
+uint8_t WiFiSpiClass::checkProtocolVersion()
+{
+    const char* s = WiFiSpiDrv::getProtocolVersion();
+    for (const char* p = protocolVer; *p; ++p, ++s)
+        if (*p != *s)
+            return 0;
+
+    return (*s == 0);
+}
+
 
 WiFiSpiClass WiFiSpi;
-

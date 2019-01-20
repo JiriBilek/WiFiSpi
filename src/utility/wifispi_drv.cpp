@@ -499,7 +499,7 @@ int8_t WiFiSpiDrv::getHostByName(const char* aHostname, IPAddress& aResult)
 /*
  * 
  */
-char* WiFiSpiDrv::getFwVersion()
+const char* WiFiSpiDrv::getFwVersion()
 {
     // Send Command
     EspSpiDrv::sendCmd(GET_FW_VERSION_CMD, PARAM_NUMS_0);
@@ -534,7 +534,7 @@ void WiFiSpiDrv::softReset(void) {
 /*
  * 
  */
-char* WiFiSpiDrv::getProtocolVersion()
+const char* WiFiSpiDrv::getProtocolVersion()
 {
     // Send Command
     EspSpiDrv::sendCmd(GET_PROTOCOL_VERSION_CMD, PARAM_NUMS_0);

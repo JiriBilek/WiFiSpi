@@ -72,6 +72,8 @@ private:
     static int16_t 	_state[MAX_SOCK_NUM];
     static uint16_t _server_port[MAX_SOCK_NUM];
 
+    static const char *protocolVer;
+
 public:
     WiFiSpiClass();
 
@@ -83,7 +85,7 @@ public:
     /*
      * Get firmware version
      */
-    static char* firmwareVersion();
+    static const char* firmwareVersion();
 
 
     /* Start Wifi connection for OPEN networks
@@ -279,10 +281,21 @@ public:
     void softReset(void);
     
     /*
-     * Get protocol version
+     * Get slave protocol version
      */
-    static char* protocolVersion();
+    static const char* protocolVersion();
 
+    /*
+     * Get master protocol version
+     */
+    static const char* masterProtocolVersion();
+
+    /*
+     * Check protocol version
+     * result: 1 if protocol version of both master and slave match
+     *         0 otherwise
+     */
+    static uint8_t checkProtocolVersion();
 
     /*
      * The following classes need r/w access to private arrays

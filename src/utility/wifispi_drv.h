@@ -270,7 +270,7 @@ public:
      * Get the firmware version
      * result: version as string with this format a.b.c
      */
-    static char* getFwVersion();
+    static const char* getFwVersion();
 
     /*
      * Get remote Data information on UDP socket
@@ -289,7 +289,7 @@ public:
      * Get the SPI protocol version
      * result: version as string with this format a.b.c
      */
-    static char* getProtocolVersion();
+    static const char* getProtocolVersion();
 
 };
 
