@@ -24,6 +24,7 @@
 
 #include "WiFiSpi.h"
 #include "utility/wifispi_drv.h"
+#include "utility/espspi_proxy.h"
 
 extern "C" {
   #include "utility/wl_definitions.h"
@@ -34,6 +35,9 @@ extern "C" {
 // Protocol version
 const char *WiFiSpiClass::protocolVer = "0.2.0";
 
+// Hardware reset pin
+int8_t WiFiSpiClass::hwResetPin = -1;
+
 // No assumptions about the value of MAX_SOCK_NUM
 int16_t 	WiFiSpiClass::_state[MAX_SOCK_NUM];
 uint16_t 	WiFiSpiClass::_server_port[MAX_SOCK_NUM];
@@ -42,7 +46,7 @@ WiFiSpiClass::WiFiSpiClass()
 {
 }
 
-void WiFiSpiClass::init(int8_t pin, uint32_t max_speed, SPIClass *in_spi)
+void WiFiSpiClass::init(int8_t pin, uint32_t max_speed, SPIClass *in_spi, int8_t hwResetPin)
 {
     // Initialize the connection arrays
     for (uint8_t i = 0; i < MAX_SOCK_NUM; ++i)
@@ -55,6 +59,9 @@ void WiFiSpiClass::init(int8_t pin, uint32_t max_speed, SPIClass *in_spi)
         pin = SS;
         
     WiFiSpiDrv::wifiDriverInit(pin, max_speed, in_spi);
+
+    WiFiSpiClass::hwResetPin = hwResetPin;
+    hardReset();
 }
 
 uint8_t WiFiSpiClass::getSocket()
@@ -372,6 +379,19 @@ uint8_t WiFiSpiClass::checkProtocolVersion()
             return 0;
 
     return (*s == 0);
+}
+
+/*
+ *
+ */
+void WiFiSpiClass::hardReset(void)
+{
+    if (hwResetPin <= 0)
+        return;  // no reset pin
+
+    pinMode(hwResetPin, OUTPUT);
+
+    espSpiProxy.hardReset(hwResetPin);
 }
 
 

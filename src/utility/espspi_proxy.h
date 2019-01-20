@@ -369,6 +369,18 @@ public:
         return crcValue;
     }
 
+    /*
+     * Puts the SS low (required for successfull boot) and resets the ESP
+     */
+    void hardReset(int8_t hwResetPin)
+    {
+        digitalWrite(_ss_pin, LOW);  // Safe value for ESP8266 GPIO15 
+        digitalWrite(hwResetPin, LOW);
+        delay(50);
+        digitalWrite(hwResetPin, HIGH);
+        delay(200);
+    }
+
 };
 
 extern EspSpiProxy espSpiProxy;
