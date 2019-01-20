@@ -96,7 +96,7 @@ bool ServerSpiDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t sock, 
     {
         if (espSpiProxy.waitForSlaveTxReady() != SPISLAVE_TX_PREPARING_DATA) 
             break;  // The state is either SPISLAVE_TX_READY or SPISLAVE_TX_NODATA with timeout
-        Serial.println("Status: Preparing data"); ///
+        WARN(F("Status: Preparing data"));
     }
     
     uint8_t _data = 0;
@@ -329,7 +329,7 @@ bool ServerSpiDrv::beginUdpPacket(uint32_t ipAddress, uint16_t port, uint8_t soc
     {
         if (espSpiProxy.waitForSlaveTxReady() != SPISLAVE_TX_PREPARING_DATA) 
             break;  // The state is either SPISLAVE_TX_READY or SPISLAVE_TX_NODATA with timeout
-        Serial.println("Status: Preparing data"); ///
+        WARN(F("Status: Preparing data")); ///
     }
     
     uint8_t _data = 0;

@@ -51,6 +51,8 @@ remoteIP	KEYWORD2
 remotePort	KEYWORD2
 softwareReset	KEYWORD2
 protocolVersion	KEYWORD2
+masterProtocolVersion	KEYWORD2
+checkProtocolVersion	KEYWORD2
 
 
 #######################################

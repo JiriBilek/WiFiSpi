@@ -262,7 +262,8 @@ public:
      * param aHostname: Name to be resolved
      * param aResult: IPAddress structure to store the returned IP address
      * result: 1 if aIPAddrString was successfully converted to an IP address,
-     *          else error code
+     *         0 error, hostname not found
+     *        -1 error, command was not performed
      */
     static int8_t getHostByName(const char* aHostname, IPAddress& aResult);
 

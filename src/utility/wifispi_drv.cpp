@@ -476,7 +476,7 @@ int8_t WiFiSpiDrv::getHostByName(const char* aHostname, IPAddress& aResult)
     {
         if (espSpiProxy.waitForSlaveTxReady() != SPISLAVE_TX_PREPARING_DATA) 
             break;  // The state is either SPISLAVE_TX_READY or SPISLAVE_TX_NODATA with timeout
-        Serial.println("Status: Preparing data"); ///
+        WARN(F("Status: Preparing data"));
     }
       
     if (!EspSpiDrv::waitResponseParams(GET_HOST_BY_NAME_CMD, PARAM_NUMS_2, params))
