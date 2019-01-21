@@ -81,6 +81,9 @@ private:
     static int getHostByName(IPAddress& aResult);
 
 public:
+    // Public constant strings
+    static const char ERROR_WAITRESPONSE[] PROGMEM;  // "Error waitResponse"
+    static const char ERROR_BADREPLY[] PROGMEM;  // "Error badReply"
 
     /*
      * Driver initialization, pin is GPIO port number used as SS
