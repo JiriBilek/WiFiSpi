@@ -20,15 +20,15 @@
  Circuit:
    1. On ESP8266 must be running (flashed) WiFiSPIESP application.
     
-   2. Connect the Arduino to the following pins on the esp8266:
+   2. Connect the master (Arduino or STM32F103) to the following pins on the esp8266:
 
-            ESP8266         |
-    GPIO    NodeMCU   Name  |   Uno
-   ===================================
-     15       D8       SS   |   D10
-     13       D7      MOSI  |   D11
-     12       D6      MISO  |   D12
-     14       D5      SCK   |   D13
+            ESP8266         |        |
+    GPIO    NodeMCU   Name  |   Uno  | STM32F103
+  ===============================================
+     15       D8       SS   |   D10  |    PA4
+     13       D7      MOSI  |   D11  |    PA7
+     12       D6      MISO  |   D12  |    PA6
+     14       D5      SCK   |   D13  |    PA5
 
     Note: If the ESP is booting at the moment when the SPI Master (i.e. Arduino) has the Select line HIGH (deselected)
     the ESP8266 WILL FAIL to boot!
@@ -38,11 +38,11 @@
 #include <PubSubClient.h>
 
 // WiFi credentials
-char ssid[] = "yourNetwork"; //  your network SSID (name)
-char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "yourNetwork";        // your network SSID (name)
+char pass[] = "secretPassword";     // your network password (use for WPA)
 
 // MQTT Broker Address
-IPAddress server(18, 194, 72, 221);  // broker.hivemq.com
+IPAddress server(18, 185, 232, 233);  // broker.hivemq.com (check it if the client does not connect, the IP address may change)
 
 // Callback function header
 void callback(char* topic, byte* payload, unsigned int length);
@@ -82,9 +82,10 @@ void setup() {
     while (true);
   }
 
-  String fv = WiFiSpi.firmwareVersion();
-  if (fv != "0.1.4") {
-    Serial.println("Please upgrade the firmware");
+  if (!WiFiSpi.checkProtocolVersion()) {
+    Serial.println("Protocol version mismatch. Please upgrade the firmware");
+    // don't continue:
+    while (true);
   }
 
   // attempt to connect to Wifi network
@@ -145,4 +146,3 @@ void loop() {
     lastMillis = millis() + 5000;
   }
 }
-
