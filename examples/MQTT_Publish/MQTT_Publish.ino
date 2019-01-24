@@ -42,7 +42,8 @@ char ssid[] = "yourNetwork";        // your network SSID (name)
 char pass[] = "secretPassword";     // your network password (use for WPA)
 
 // MQTT Broker Address
-IPAddress server(18, 185, 232, 233);  // broker.hivemq.com (check it if the client does not connect, the IP address may change)
+//IPAddress server(18, 185, 232, 233);  // broker.hivemq.com (check it if the client does not connect, the IP address may change)
+const char *server = "broker.hivemq.com";
 
 // Callback function header
 void callback(char* topic, byte* payload, unsigned int length);
