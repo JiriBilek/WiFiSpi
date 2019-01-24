@@ -43,6 +43,9 @@ Initializes the library and the Arduino SPI interface. Must be called on beginni
 - **char* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.
 
+- **char* protocolVersion()**
+Returns version of protocol the ESP8266 firmware operates with.
+
 - **uint8_t begin(const char* ssid)**
 Connects to an open (unencrypted) wifi. Returns a value from *wl_status_t* enum(when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
@@ -57,6 +60,9 @@ Returns the connection status of the WiFi interface. The returned value is one o
 
 - **int8_t hostByName(const char* aHostname, IPAddress& aResult)**
 Resolves the given hostname to an IP address. Returns 1 for Ok else error code.
+
+ - **void softReset(void)**
+ Sends reset command to ESP8266. The ESP8266 then resets itself. The command is performed only if the connection between the host and ESP8266 is not broken. 
 
 ----------
 
@@ -134,7 +140,7 @@ Connects to the specified IP address and port. Returns a value from enum *wl_tcp
 Connects to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
 - **uint8_t connected()**
-Returns connection state as a logic value: 1 = connected, 0 = error.
+Returns connection state as a logic value: 1 = connected, 0 = error. Note that the connection could be closed by a server when ESP8266 reads all data in its internal buffer although the master haven't read it yet.
 
 - **uint8_t status()**
 Returns connection state as a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
@@ -167,7 +173,7 @@ Sends the buffer to the network. Returns number of bytes transmitted. Note that 
 
 ### WiFiSpiServer
 
-The library has a pool of 4 sockets and after exhausting all the sockets no more connection is available. Therefore it is important to close the socket (i. e. stop the server) when it is no longer used.
+The library has a pool of 4 sockets and after exhausting all the sockets no more connection is available. Therefore it is important to close the socket (i. e. stop the server) when it is no longer used. This version of the library is further constrained to one client connection per server.
 
 - **WiFiSpiServer(uint16_t port)**
 Constructor. Does not open a connection.

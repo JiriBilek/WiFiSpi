@@ -1,3 +1,6 @@
+0.1.4 (2009-01-24)
+  * Fixed delays in SPI protocol
+  * Added softReset and protocolVersion commands (might be added earlier)
 0.1.1 (2018-07-03)
   * Added parameter to init function (SPI max speed)
   * Enabled STM32F1 architecture although there will be a lot of work yet
