@@ -49,7 +49,7 @@ endPacket	KEYWORD2
 parsePacket	KEYWORD2
 remoteIP	KEYWORD2
 remotePort	KEYWORD2
-softwareReset	KEYWORD2
+softReset	KEYWORD2
 protocolVersion	KEYWORD2
 
 
