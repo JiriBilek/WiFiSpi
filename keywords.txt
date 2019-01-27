@@ -50,6 +50,7 @@ parsePacket	KEYWORD2
 remoteIP	KEYWORD2
 remotePort	KEYWORD2
 softReset	KEYWORD2
+hardReset	KEYWORD2
 protocolVersion	KEYWORD2
 masterProtocolVersion	KEYWORD2
 checkProtocolVersion	KEYWORD2
