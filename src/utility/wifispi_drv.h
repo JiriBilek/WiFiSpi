@@ -81,6 +81,9 @@ private:
     static int getHostByName(IPAddress& aResult);
 
 public:
+    // Public constant strings
+    static const char ERROR_WAITRESPONSE[] PROGMEM;  // "Error waitResponse"
+    static const char ERROR_BADREPLY[] PROGMEM;  // "Error badReply"
 
     /*
      * Driver initialization, pin is GPIO port number used as SS
@@ -262,7 +265,8 @@ public:
      * param aHostname: Name to be resolved
      * param aResult: IPAddress structure to store the returned IP address
      * result: 1 if aIPAddrString was successfully converted to an IP address,
-     *          else error code
+     *         0 error, hostname not found
+     *        -1 error, command was not performed
      */
     static int8_t getHostByName(const char* aHostname, IPAddress& aResult);
 
@@ -270,7 +274,7 @@ public:
      * Get the firmware version
      * result: version as string with this format a.b.c
      */
-    static char* getFwVersion();
+    static const char* getFwVersion();
 
     /*
      * Get remote Data information on UDP socket
@@ -289,7 +293,7 @@ public:
      * Get the SPI protocol version
      * result: version as string with this format a.b.c
      */
-    static char* getProtocolVersion();
+    static const char* getProtocolVersion();
 
 };
 

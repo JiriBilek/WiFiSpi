@@ -65,12 +65,18 @@ public:
      *
      * param pin: SS pin, default value get default pin
      * param max_speed: maximum speed of SPI interface
+     * param in_spi: pointer to SPI Class
+     * param hwResetPin: number of the PIN connected to ESP's RESET or -1
      */
-    static void init(int8_t pin = -1, uint32_t max_speed = 0, SPIClass *in_spi = &SPI);
+    static void init(int8_t pin = -1, uint32_t max_speed = 0, SPIClass *in_spi = &SPI, int8_t hwResetPin = -1);
 
 private:
     static int16_t 	_state[MAX_SOCK_NUM];
     static uint16_t _server_port[MAX_SOCK_NUM];
+
+    static int8_t hwResetPin;
+
+    static const char *protocolVer;
 
 public:
     WiFiSpiClass();
@@ -83,7 +89,7 @@ public:
     /*
      * Get firmware version
      */
-    static char* firmwareVersion();
+    static const char* firmwareVersion();
 
 
     /* Start Wifi connection for OPEN networks
@@ -276,13 +282,32 @@ public:
      * After the reset wait for the ESP8266 to came to life again. Typically, the ESP8266 boots within 100 ms,
      * but with the WifiManager installed on ESP it can be a couple of seconds.
      */
-    void softReset(void);
+    static void softReset(void);
     
     /*
-     * Get protocol version
+     * Perform hardware reset of the ESP8266 module. The PIN connected to ESP's reset must be declared in init() 
+     * After the reset wait for the ESP8266 to came to life again. Typically, the ESP8266 boots within 100 ms,
+     * but with the WifiManager installed on ESP it can be a couple of seconds.
+     * This function waits for 200 ms.
      */
-    static char* protocolVersion();
+    static void hardReset(void);
+    
+    /*
+     * Get slave protocol version
+     */
+    static const char* protocolVersion();
 
+    /*
+     * Get master protocol version
+     */
+    static const char* masterProtocolVersion();
+
+    /*
+     * Check protocol version
+     * result: 1 if protocol version of both master and slave match
+     *         0 otherwise
+     */
+    static uint8_t checkProtocolVersion();
 
     /*
      * The following classes need r/w access to private arrays

@@ -33,9 +33,9 @@
 class WiFiSpiClient : public Client {
 
 private:
-    static uint16_t _srcport;
+    //static uint16_t _srcport;
     uint8_t _sock;   //not used
-    uint16_t  _socket;
+    //uint16_t  _socket;
 
 public:
     WiFiSpiClient();

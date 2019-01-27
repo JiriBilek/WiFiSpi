@@ -34,6 +34,7 @@ extern "C" {
 #include "debug.h"
 }
 
+#define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
 
 /*
     Start server TCP on port specified
@@ -52,7 +53,7 @@ bool ServerSpiDrv::startServer(uint16_t port, uint8_t sock, uint8_t protMode)
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(START_SERVER_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = 0;
     }
     
@@ -71,7 +72,7 @@ void ServerSpiDrv::stopServer(uint8_t sock)
 
     if (!EspSpiDrv::waitResponseCmd(STOP_SERVER_TCP_CMD, PARAM_NUMS_0, NULL, NULL))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
     }
 }
 
@@ -96,14 +97,14 @@ bool ServerSpiDrv::startClient(uint32_t ipAddress, uint16_t port, uint8_t sock, 
     {
         if (espSpiProxy.waitForSlaveTxReady() != SPISLAVE_TX_PREPARING_DATA) 
             break;  // The state is either SPISLAVE_TX_READY or SPISLAVE_TX_NODATA with timeout
-        Serial.println("Status: Preparing data"); ///
+        WARN(F("Status: Preparing data"));
     }
     
     uint8_t _data = 0;
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(START_CLIENT_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = 0;
     }
 
@@ -124,7 +125,7 @@ void ServerSpiDrv::stopClient(uint8_t sock)
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(STOP_CLIENT_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
     }
 }
 
@@ -142,7 +143,7 @@ uint8_t ServerSpiDrv::getServerState(uint8_t sock)
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(GET_STATE_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = CLOSED;
     }
 
@@ -164,7 +165,7 @@ uint8_t ServerSpiDrv::getClientState(const uint8_t sock)
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(GET_CLIENT_STATE_TCP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = 0;
     }
 
@@ -186,7 +187,7 @@ uint16_t ServerSpiDrv::availData(const uint8_t sock)
     uint8_t _dataLen = sizeof(_data16);
     if (!EspSpiDrv::waitResponseCmd(AVAIL_DATA_TCP_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data16 = 0;
     }
 
@@ -209,7 +210,7 @@ bool ServerSpiDrv::getData(const uint8_t sock, int16_t *data, const uint8_t peek
     uint8_t _dataLen = sizeof(_data16);
     if (!EspSpiDrv::waitResponseCmd(GET_DATA_TCP_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
     {
-        WARN("error waitResponse");
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _dataLen = 0;
     }
     else
@@ -234,7 +235,7 @@ bool ServerSpiDrv::getDataBuf(const uint8_t sock, uint8_t *_data, uint16_t *_dat
     uint16_t _dataLenRead = *_dataLen;
     if (!EspSpiDrv::waitResponseCmd16(GET_DATABUF_TCP_CMD, PARAM_NUMS_1, _data, &_dataLenRead))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _dataLenRead = 0;
     }
 
@@ -260,7 +261,7 @@ bool ServerSpiDrv::insertDataBuf(uint8_t sock, const uint8_t *data, uint16_t _le
     uint8_t _dataLen = sizeof(_data16);
     if (!EspSpiDrv::waitResponseCmd(INSERT_DATABUF_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data16 = 0;
     }
     return (_dataLen == sizeof(_data16) && _data16 == _len);
@@ -281,7 +282,7 @@ bool ServerSpiDrv::sendUdpData(uint8_t sock)
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(SEND_DATA_UDP_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = 0;
     }
 
@@ -304,7 +305,7 @@ bool ServerSpiDrv::sendData(const uint8_t sock, const uint8_t *data, const uint1
     uint8_t _dataLen = sizeof(_data16);
     if (!EspSpiDrv::waitResponseCmd(SEND_DATA_TCP_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data16 = 0;
     }
     return (_dataLen == sizeof(_data16) && _data16 == len);
@@ -329,14 +330,14 @@ bool ServerSpiDrv::beginUdpPacket(uint32_t ipAddress, uint16_t port, uint8_t soc
     {
         if (espSpiProxy.waitForSlaveTxReady() != SPISLAVE_TX_PREPARING_DATA) 
             break;  // The state is either SPISLAVE_TX_READY or SPISLAVE_TX_NODATA with timeout
-        Serial.println("Status: Preparing data"); ///
+        WARN(F("Status: Preparing data")); ///
     }
     
     uint8_t _data = 0;
     uint8_t _dataLen = sizeof(_data);
     if (!EspSpiDrv::waitResponseCmd(BEGIN_UDP_PACKET_CMD, PARAM_NUMS_1, &_data, &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data = 0;
     }
 
@@ -358,7 +359,7 @@ uint16_t ServerSpiDrv::parsePacket(const uint8_t sock)
     uint8_t _dataLen = sizeof(_data16);
     if (!EspSpiDrv::waitResponseCmd(UDP_PARSE_PACKET_CMD, PARAM_NUMS_1, reinterpret_cast<uint8_t *>(&_data16), &_dataLen))
     {
-        WARN(F("error waitResponse"));
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
         _data16 = 0;
     }
 

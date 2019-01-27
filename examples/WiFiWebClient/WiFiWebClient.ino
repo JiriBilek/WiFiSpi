@@ -1,7 +1,7 @@
 /*
   Web client
 
- This sketch connects to a website (http://www.google.com)
+ This sketch connects to a website (http://www.example.com)
  using a WiFi ESP8266 module.
 
  This example is written for a network using WPA encryption.
@@ -9,15 +9,15 @@
  Circuit:
    1. On ESP8266 must be running (flashed) WiFiSPIESP application.
     
-   2. Connect the Arduino to the following pins on the esp8266:
+   2. Connect the master (Arduino or STM32F103) to the following pins on the esp8266:
 
-            ESP8266         |
-    GPIO    NodeMCU   Name  |   Uno
-   ===================================
-     15       D8       SS   |   D10
-     13       D7      MOSI  |   D11
-     12       D6      MISO  |   D12
-     14       D5      SCK   |   D13
+            ESP8266         |        |
+    GPIO    NodeMCU   Name  |   Uno  | STM32F103
+  ===============================================
+     15       D8       SS   |   D10  |    PA4
+     13       D7      MOSI  |   D11  |    PA7
+     12       D6      MISO  |   D12  |    PA6
+     14       D5      SCK   |   D13  |    PA5
 
     Note: If the ESP is booting at the moment when the SPI Master (i.e. Arduino) has the Select line HIGH (deselected)
     the ESP8266 WILL FAIL to boot!
@@ -34,14 +34,15 @@
 
 #include <WiFiSpi.h>
 
-char ssid[] = "yourNetwork"; //  your network SSID (name)
-char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
+// WiFi credentials
+char ssid[] = "yourNetwork";        // your network SSID (name)
+char pass[] = "secretPassword";     // your network password (use for WPA)
 
 int status = WL_IDLE_STATUS;
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
-//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
-char server[] = "www.google.com";    // name address for Google (using DNS)
+//IPAddress server(93,184,216,34);  // numeric IP for www.example.com (no DNS)
+char server[] = "www.example.com";    // name address using DNS
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server
@@ -65,9 +66,10 @@ void setup() {
     while (true);
   }
 
-  String fv = WiFiSpi.firmwareVersion();
-  if (fv != "0.1.4") {
-    Serial.println("Please upgrade the firmware");
+  if (!WiFiSpi.checkProtocolVersion()) {
+    Serial.println("Protocol version mismatch. Please upgrade the firmware");
+    // don't continue:
+    while (true);
   }
 
   // attempt to connect to Wifi network:
@@ -88,8 +90,8 @@ void setup() {
   if (client.connect(server, 80)) {
     Serial.println("connected to server");
     // Make a HTTP request:
-    client.println("GET /search?q=arduino HTTP/1.1");
-    client.println("Host: www.google.com");
+    client.println("GET / HTTP/1.1");
+    client.println("Host: www.example.com");
     client.println("Connection: close");
     client.println();
   }
@@ -131,8 +133,3 @@ void printWifiStatus() {
   Serial.print(rssi);
   Serial.println(" dBm");
 }
-
-
-
-
-

@@ -5,6 +5,14 @@ This library connects Arduino to ESP8266 module and uses it as a dedicated WiFi 
 
 The library allows Arduino to be client or server on the WiFi network.
 
+## News
+
+#### 2019-01-27
+
+Enhanced communications protocol (added CRC-8 and confirmation of message reception). Shortened the status message from 4 bytes to 2 bytes and added XOR check. The protocol version is now 0.2.0 and is incompatible with the former one.
+
+Added support for hardware circuit removing the problems with ESP8266 reset by pulling GPIO15 (SS) pin to GND on reset.
+
 ## Requirements
 
 ### ESP8266 device
@@ -37,14 +45,20 @@ The library implements almost the same functions as the [Arduino WiFi library](h
 
 After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically instantiated. Use the variable to perform the following calls.
 
-- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI)**
-Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter max_speed limits the SPI speed. Recent tests on STM32F1 show that faster speeds than 1000000 are unreliable. Maybe affected by bad wiring on testing breadboard. The parameter in_spi allows to use another SPI port (if there are more in the MCU). Refer to a particular implementation of SPIClass.
+- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI, int8_t hwResetPin = -1)**
+Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter *max_speed* limits the SPI speed. Tests on STM32F1 show that speeds as high as 9 Mhz are usable. The parameter *in_spi* allows to use another SPI port (if there are more present in the MCU). Refer to a particular implementation of SPIClass. The optional parameter *hwResetPin* defines the pin which is connected to reset pin on ESP8266 for hardware reset. Then this parameter is present,  master resets the ESP8266 on start.
 
 - **char* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.
 
 - **char* protocolVersion()**
 Returns version of protocol the ESP8266 firmware operates with.
+
+- **char* masterProtocolVersion()**
+Returns version of protocol the master runs.
+
+- **uint8_t checkProtocolVersion()**
+Checks master and ESP protocol version. If they match, returns 1, otherwise 0.
 
 - **uint8_t begin(const char* ssid)**
 Connects to an open (unencrypted) wifi. Returns a value from *wl_status_t* enum(when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
@@ -63,6 +77,9 @@ Resolves the given hostname to an IP address. Returns 1 for Ok else error code.
 
  - **void softReset(void)**
  Sends reset command to ESP8266. The ESP8266 then resets itself. The command is performed only if the connection between the host and ESP8266 is not broken. 
+
+ - **void hardReset(void)**
+ Resets the ESP8266. One pin on master unit must be wired to reset pin on ESP8266. The pin is defined in **init** function.
 
 ----------
 
@@ -251,7 +268,13 @@ Connects to the network and prints out some information.
 - **WiFiWebClient**
 Connects to the google.com site and transmits the http response.
 
-More examples to come soon. But you can easily use the ones from WiFi library. Don't forget to add a line *WiFiSpi.init();* somewhere to the setup() function.
+- **MQTT_Publish**
+Simple mqtt messaging.
+
+- **UdpNTPClient**
+Reads current time and date from a NTP server.
+
+More examples to come soon. But you can easily use the ones from WiFi library. Don't forget to add a line *WiFiSpi.init();* before using other library functions.
 
 ## Debugging
 
