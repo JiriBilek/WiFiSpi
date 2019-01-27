@@ -42,6 +42,11 @@
 #include <SPI.h>
 #include "debug.h"
 
+// Uncomment the following define if the safe reset circuit (https://github.com/JiriBilek/WiFiSpiESP/issues/6)
+// is connected to SS pin on ESP8266. This allows the SS signal to behave exactly
+// according SPI specification (goes low before transmission and high after)
+//#define ESP8266_SAFE_RESET_IMPLEMENTED
+
 // The command codes are fixed by ESP8266 hardware
 #define CMD_WRITESTATUS  0x01
 #define CMD_WRITEDATA    0x02
@@ -88,6 +93,16 @@ private:
     {
         if (_ss_pin >= 0)
         {
+
+#if defined(ESP8266_SAFE_RESET_IMPLEMENTED)
+            if (start) {
+                digitalWrite(_ss_pin, LOW);
+                delayMicroseconds(20);  // 10us is low (some errors), 15 is ok, 25 us is safe for speeds > 4MHz
+            }
+            else {
+                digitalWrite(_ss_pin, HIGH);
+            }
+#else
             if (start) {  // tested ok: 5, 15 / 5
                 digitalWrite(_ss_pin, HIGH);
                 delayMicroseconds(5);
@@ -100,6 +115,8 @@ private:
                 delayMicroseconds(5);
                 digitalWrite(_ss_pin, LOW);
             }
+#endif
+
         }
     }
     
@@ -116,7 +133,11 @@ public:
 
         _ss_pin = pin;
         pinMode(_ss_pin, OUTPUT);
+#if defined(ESP8266_SAFE_RESET_IMPLEMENTED)
+        digitalWrite(_ss_pin, HIGH);
+#else
         digitalWrite(_ss_pin, LOW);  // Safe value for ESP8266 GPIO15 
+#endif
     }
 
     uint16_t readStatus()
@@ -374,7 +395,9 @@ public:
      */
     void hardReset(int8_t hwResetPin)
     {
+#if !defined(ESP8266_SAFE_RESET_IMPLEMENTED)
         digitalWrite(_ss_pin, LOW);  // Safe value for ESP8266 GPIO15 
+#endif
         digitalWrite(hwResetPin, LOW);
         delay(50);
         digitalWrite(hwResetPin, HIGH);
