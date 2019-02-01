@@ -49,7 +49,7 @@ private:
     static SPIClass *spi_obj;
 
 	// settings of requested network
-	static char 	_networkSsid[WL_SSID_MAX_LENGTH];
+	static char 	_networkSsid[WL_SSID_MAX_LENGTH+1];
 	static int32_t 	_networkRssi;
 	static uint8_t 	_networkEncr;
 
@@ -59,7 +59,7 @@ private:
 	static char 	protocolVersion[WL_PROTOCOL_VER_LENGTH];
 
 	// settings of current selected network
-	static char 	_ssid[WL_SSID_MAX_LENGTH];
+	static char 	_ssid[WL_SSID_MAX_LENGTH+1];
 	static uint8_t 	_bssid[WL_MAC_ADDR_LENGTH];
 	static uint8_t 	_mac[WL_MAC_ADDR_LENGTH];
 	static uint8_t  _localIp[WL_IPV4_LENGTH];

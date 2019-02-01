@@ -103,6 +103,8 @@ int8_t WiFiSpiDrv::getScannedData(uint8_t networkItem, char *ssid, int32_t *rssi
         return WL_FAILURE;
     }
 
+    ssid[params[0].paramLen] = 0;  // end of string
+
     return WL_SUCCESS;    
 }
 
@@ -336,6 +338,8 @@ char* WiFiSpiDrv::getCurrentSSID()
         WARN(FPSTR(ERROR_WAITRESPONSE));
     }
     
+    _ssid[_dataLen] = 0;  // terminate the string
+
     return _ssid;
 }
 
