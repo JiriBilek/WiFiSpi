@@ -207,7 +207,9 @@ public:
         buffer[31] = crc8(buffer, 31);
 
         // Wait for slave ready
-        if (waitForSlaveRxReady() == SPISLAVE_RX_READY)  // TODO: move the waiting loop to writeByte
+        // TODO: move the waiting loop to writeByte (defer waiting)
+        uint8_t s = waitForSlaveRxReady();
+        if (s == SPISLAVE_RX_READY || s == SPISLAVE_RX_ERROR)  // Error state can't be recovered, we can send new data
         {
             // Try to send the buffer 10 times, we may not be stuck in an endless loop
             for (uint8_t i=0; i<10; ++i)
