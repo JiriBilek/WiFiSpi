@@ -291,7 +291,8 @@ public:
 
             if ((status & 0xff) == ((status >> 8) ^ 0xff))  // check the xor
             {
-                if (((status >> 4) & 0x0f) == SPISLAVE_RX_READY)
+                uint16_t s = (status >> 4) & 0x0f;
+                if (s == SPISLAVE_RX_READY || s == SPISLAVE_RX_ERROR)  // From the perspective of rx state the error is the same as ready 
                     return ((status >> 4) & 0x0f);  // status
             }
 
