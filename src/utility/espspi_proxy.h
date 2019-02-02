@@ -289,7 +289,7 @@ public:
         {
             status = readStatus();
 
-            if ((status & 0xff) == (status >> 8) ^ 0xff)  // check the xor
+            if ((status & 0xff) == ((status >> 8) ^ 0xff))  // check the xor
             {
                 if (((status >> 4) & 0x0f) == SPISLAVE_RX_READY)
                     return ((status >> 4) & 0x0f);  // status
@@ -318,7 +318,7 @@ public:
         {
             status = readStatus();
 
-            if ((status & 0xff) == (status >> 8) ^ 0xff)  // check the xor
+            if ((status & 0xff) == ((status >> 8) ^ 0xff))  // check the xor
             {
                 if ((status & 0x0f) == SPISLAVE_TX_READY)
                     return (status & 0x0f);  // status
@@ -346,7 +346,7 @@ public:
         {
             status = readStatus();
 
-            if ((status & 0xff) == (status >> 8) ^ 0xff)  // check the xor
+            if ((status & 0xff) == ((status >> 8) ^ 0xff))  // check the xor
             {
                 uint8_t stat = (status >> 4) & 0x0f;
 
