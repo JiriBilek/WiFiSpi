@@ -18,14 +18,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include "../config.h"
 #include "espspi_drv.h"
 
-//#define _DEBUG
-
 // Read and check one byte from the input
-#ifdef _DEBUG
+#if defined(ESPSPI_DEBUG_OPTION_BAD_MESSAGE)
 #define READ_AND_CHECK_BYTE(c, err)                         \
-            {                                          \
+            do {                                       \
                 uint8_t _b = espSpiProxy.readByte();   \
                 if (_b != (c)) {                       \
                     Serial.print(err);                 \
@@ -33,11 +32,13 @@
                     Serial.print(", got:");  Serial.print(_b, HEX);  \
                     return 0;                          \
                 }                                      \
-            }
+            } while (false)
 #else
 #define READ_AND_CHECK_BYTE(c, err)                   \
-            if (espSpiProxy.readByte() != (c))   \
-                return 0;
+            do {                                     \
+                if (espSpiProxy.readByte() != (c))   \
+                    return 0;                        \
+            } while (false)
 #endif
 
 /* 

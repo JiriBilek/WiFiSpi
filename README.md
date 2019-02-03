@@ -41,6 +41,10 @@ Please be careful, the ESP8266 chip ports are **NOT** 5V tolerant, if you're con
 
 The library implements almost the same functions as the [Arduino WiFi library](https://www.arduino.cc/en/Reference/WiFi).
 
+### Setup
+
+All the important defines are in file **config.h**. The user can comment and/or uncomment them and modify the behaviour of the library.
+
 ### WiFiSpiClass
 
 After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically instantiated. Use the variable to perform the following calls.

@@ -26,7 +26,7 @@
 
 #include "debug.h"
 
-#ifdef _DEBUG_
+#if defined(ESPSPI_DEBUG_OPTION)
 
 #include <string.h>
 

@@ -39,13 +39,9 @@
 #ifndef _ESPSPI_PROXY_H_INCLUDED
 #define _ESPSPI_PROXY_H_INCLUDED
 
+#include "../config.h"
 #include <SPI.h>
 #include "debug.h"
-
-// Uncomment the following define if the safe reset circuit (https://github.com/JiriBilek/WiFiSpiESP/issues/6)
-// is connected to SS pin on ESP8266. This allows the SS signal to behave exactly
-// according SPI specification (goes low before transmission and high after)
-//#define ESP8266_SAFE_RESET_IMPLEMENTED
 
 // The command codes are fixed by ESP8266 hardware
 #define CMD_WRITESTATUS  0x01

@@ -28,12 +28,11 @@
 #ifndef _DEBUG_H_INCLUDED
 #define _DEBUG_H_INCLUDED
 
-#define _DEBUG_
-
 #define DBGOUT  Serial
 
 #include <stdio.h>
 #include <string.h>
+#include "../config.h"
 
 const char *DbgFileName(const char *s);
 
@@ -43,7 +42,7 @@ const char *DbgFileName(const char *s);
 		DBGOUT.print(":");DBGOUT.print(__LINE__);DBGOUT.print("]");\
 }while (0);
 
-#ifdef _DEBUG_
+#if defined(ESPSPI_DEBUG_OPTION)
 
 #define INFO(format, args...) do { \
 	char buf[250];	\
@@ -67,7 +66,7 @@ const char *DbgFileName(const char *s);
 #define INFO(format, args...) do {} while(0);
 #endif
 
-#ifdef _DEBUG_
+#if defined(ESPSPI_DEBUG_OPTION)
 #define WARN(args) do { PRINT_FILE_LINE()			\
 		DBGOUT.print(" W: "); DBGOUT.println(args);	\
 }while (0);
