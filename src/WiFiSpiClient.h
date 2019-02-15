@@ -44,8 +44,13 @@ public:
     uint8_t status();
     virtual int connect(IPAddress ip, uint16_t port);
     virtual int connect(const char *host, uint16_t port);
-    virtual size_t write(uint8_t);
     virtual size_t write(const uint8_t *buf, size_t size);
+    virtual size_t write(uint8_t b)
+        { return write(&b, 1); }
+    virtual size_t write(const char *str)  
+        { return write(reinterpret_cast<const uint8_t *>(str), strlen(str)); }
+    virtual size_t write(const void *str, size_t size) 
+        { return write(reinterpret_cast<const uint8_t *>(str), size); }
     virtual int available();
     virtual int read();
     virtual int read(uint8_t *buf, size_t size);

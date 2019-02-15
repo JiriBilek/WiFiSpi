@@ -76,7 +76,7 @@ void setup() {
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
-    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+    // Connect to WPA/WPA2 network. Change this line if using open network:
     status = WiFiSpi.begin(ssid, pass);
 
     // wait 10 seconds for connection:
@@ -90,10 +90,11 @@ void setup() {
   if (client.connect(server, 80)) {
     Serial.println("connected to server");
     // Make a HTTP request:
-    client.println("GET / HTTP/1.1");
-    client.println("Host: www.example.com");
-    client.println("Connection: close");
-    client.println();
+    // Note: client.print() is transmitting one char per a message that is awfully wasting the SPI bus bandwidth
+    //       client.write(char*) is optimized and has minimum overhead
+    client.write("GET / HTTP/1.1\r\n"
+                 "Host: www.example.com\r\n"
+                 "Connection: close\r\n\r\n");
   }
 }
 

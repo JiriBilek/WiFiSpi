@@ -78,13 +78,6 @@ int WiFiSpiClient::connect(IPAddress ip, uint16_t port)
 /*
  * 
  */
-size_t WiFiSpiClient::write(uint8_t b) {
-	  return write(&b, 1);
-}
-
-/*
- * 
- */
 size_t WiFiSpiClient::write(const uint8_t *buf, size_t size)
 {
     if (_sock >= MAX_SOCK_NUM || size == 0)
