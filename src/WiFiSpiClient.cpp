@@ -49,7 +49,7 @@ int WiFiSpiClient::connect(const char* host, uint16_t port)
 	IPAddress remote_addr;
 	if (WiFiSpi.hostByName(host, remote_addr))
 	{
-		return connect(remote_addr, port);
+		return _connect(remote_addr, port, false);
 	}
 	return 0;
 }
@@ -59,10 +59,39 @@ int WiFiSpiClient::connect(const char* host, uint16_t port)
  */
 int WiFiSpiClient::connect(IPAddress ip, uint16_t port)
 {
+    return _connect(ip, port, false);
+}
+
+/*
+ * 
+ */
+int WiFiSpiClient::connectSSL(const char* host, uint16_t port)
+{
+  IPAddress remote_addr;
+  if (WiFiSpi.hostByName(host, remote_addr))
+  {
+    return _connect(remote_addr, port, true);
+  }
+  return 0;
+}
+
+/*
+ * 
+ */
+int WiFiSpiClient::connectSSL(IPAddress ip, uint16_t port)
+{
+    return _connect(ip, port, true);
+}
+
+/*
+ * 
+ */
+int WiFiSpiClient::_connect(IPAddress ip, uint16_t port, bool isSSL)
+{
     _sock = WiFiSpiClass::getSocket();
     if (_sock != SOCK_NOT_AVAIL)
     {
-        if (! ServerSpiDrv::startClient(uint32_t(ip), port, _sock))
+        if (! ServerSpiDrv::startClient(uint32_t(ip), port, _sock, (isSSL ? TCP_MODE_WITH_TLS : TCP_MODE)))
             return 0;   // unsuccessfull
 
         WiFiSpiClass::_state[_sock] = _sock;
@@ -194,3 +223,12 @@ WiFiSpiClient::operator bool() {
   return (_sock != SOCK_NOT_AVAIL);
 }
 
+/*
+ * 
+ */
+uint8_t WiFiSpiClient::verifySSL(uint8_t* fingerprint, const char *host) {
+    if (_sock == SOCK_NOT_AVAIL || host[0] == 0)
+        return 0;
+
+    return ServerSpiDrv::verifySSLClient(_sock, fingerprint, host);
+}

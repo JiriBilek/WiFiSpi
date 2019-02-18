@@ -363,3 +363,30 @@ uint16_t ServerSpiDrv::parsePacket(const uint8_t sock)
 
     return _data16;
 }
+
+/*
+ * Sends verifySSL command
+ * fingerprint - SHA1 of server certificate - must be 20 bytes (not character string!)
+ * host - host name
+ */
+uint8_t ServerSpiDrv::verifySSLClient(const uint8_t sock, uint8_t *fingerprint, const char *host) 
+{
+    // Send Command
+    EspSpiDrv::sendCmd(VERIFY_SSL_CLIENT_CMD, PARAM_NUMS_3);
+    EspSpiDrv::sendParam(fingerprint, 20);
+    EspSpiDrv::sendParam(reinterpret_cast<const uint8_t *>(host), strlen(host));
+    EspSpiDrv::sendParam(sock);
+    EspSpiDrv::endCmd();
+
+    // Wait for reply
+
+    uint8_t _data = 0;
+    uint8_t _dataLen = sizeof(_data);
+    if (!EspSpiDrv::waitResponseCmd(VERIFY_SSL_CLIENT_CMD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
+        _data = 0;
+    }
+
+    return _data;  // return value 1 means ok
+}
