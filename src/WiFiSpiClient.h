@@ -33,9 +33,7 @@
 class WiFiSpiClient : public Client {
 
 private:
-    //static uint16_t _srcport;
     uint8_t _sock;   //not used
-    //uint16_t  _socket;
 
 public:
     WiFiSpiClient();
@@ -44,6 +42,11 @@ public:
     uint8_t status();
     virtual int connect(IPAddress ip, uint16_t port);
     virtual int connect(const char *host, uint16_t port);
+    virtual int connectSSL(IPAddress ip, uint16_t port);
+    virtual int connectSSL(const char *host, uint16_t port);
+
+    uint8_t verifySSL(uint8_t* fingerprint, const char *host);
+
     virtual size_t write(const uint8_t *buf, size_t size);
     virtual size_t write(uint8_t b)
         { return write(&b, 1); }
@@ -61,6 +64,10 @@ public:
     virtual operator bool();
 
     using Print::write;
+
+private:
+    int _connect(IPAddress ip, uint16_t port, bool isSSL);
+
 };
 
 #endif

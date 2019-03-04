@@ -7,6 +7,10 @@ The library allows Arduino to be client or server on the WiFi network.
 
 ## News
 
+#### 2019-02-18
+
+Added SSL connection to WiFiClient class. Added verifySSL function.
+
 #### 2019-01-27
 
 Enhanced communications protocol (added CRC-8 and confirmation of message reception). Shortened the status message from 4 bytes to 2 bytes and added XOR check. The protocol version is now 0.2.0 and is incompatible with the former one.
@@ -160,6 +164,12 @@ Connects to the specified IP address and port. Returns a value from enum *wl_tcp
 - **int connect(const char *host, uint16_t port)**
 Connects to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
+- **int connectSSL(IPAddress ip, uint16_t port)**
+Connects using SSL to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+
+- **int connectSSL(const char *host, uint16_t port)**
+Connects using SSL to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+
 - **uint8_t connected()**
 Returns connection state as a logic value: 1 = connected, 0 = error. Note that the connection could be closed by a server when ESP8266 reads all data in its internal buffer although the master haven't read it yet.
 
@@ -171,6 +181,10 @@ Stops the client (disconnects from the remote server if still connected) and fre
 
 - **operator bool()**
 Returns true when the client is associated with a socket.
+
+- **int verifySSL(uint8_t* fingerprint, const char *host)**
+Verifies server SSL certificate for a fingerprint and domain name. The fingerprint is a 20 byte SHA-1 value certificate fingerprint. It can be read e.g. from web browser examinig the certificate. The parameter *fingerprint* is a 20 byte uint8_t array, it is *not* a character string. The parameter *host* is the domain name of the server we are connecting to.
+
 
 ----------
 
@@ -189,8 +203,11 @@ Peeks into the input queue and returns the first byte in the queue. On error ret
 - **size_t write(uint8_t)**
 Sends one byte to the network. Returns 1 on success, 0 on error.
 
-- **size_t write(const uint8_t *buf, size_t size)**
-Sends the buffer to the network. Returns number of bytes transmitted. Note that on the transmitter side there is usually a buffer so that the data is not guaranteed to be transmit.
+- **size_t write(const void *buf, size_t size)**
+Sends the buffer to the network. Returns number of bytes transmitted.
+
+- **size_t write(const char *str)**
+Sends the character string to the network. Returns number of bytes transmitted.
 
 ### WiFiSpiServer
 

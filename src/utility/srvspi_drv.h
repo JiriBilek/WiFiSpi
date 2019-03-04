@@ -28,7 +28,11 @@
 #include <inttypes.h>
 #include "wifi_spi.h"
 
-typedef enum eProtMode {TCP_MODE, UDP_MODE} tProtMode;
+typedef enum eProtMode {
+    TCP_MODE, 
+    UDP_MODE, 
+    TCP_MODE_WITH_TLS }
+tProtMode;
 
 class ServerSpiDrv
 {
@@ -64,6 +68,8 @@ public:
     static bool beginUdpPacket(uint32_t ip, uint16_t port, uint8_t sock);
 
     static uint16_t parsePacket(const uint8_t sock);
+
+    static uint8_t verifySSLClient(const uint8_t sock, uint8_t *fingerprint, const char *host);
 };
 
 #endif

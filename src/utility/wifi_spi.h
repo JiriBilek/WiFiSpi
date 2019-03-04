@@ -78,6 +78,7 @@ enum {
     SOFTWARE_RESET_CMD       = 0x3F,
 
     GET_PROTOCOL_VERSION_CMD = 0x50,
+    VERIFY_SSL_CLIENT_CMD    = 0x51,
 
     // All command with DATA_FLAG 0x40 send a 16bit Len
 
