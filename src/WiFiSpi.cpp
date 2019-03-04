@@ -92,7 +92,6 @@ uint8_t WiFiSpiClass::begin(const char* ssid)
 
     if (WiFiSpiDrv::wifiSetNetwork(ssid, strlen(ssid)) != WL_FAILURE)
     {
-        // TODO: Improve timing
 	    do
 	    {
 		    delay(WL_DELAY_START_CONNECTION);
@@ -105,28 +104,6 @@ uint8_t WiFiSpiClass::begin(const char* ssid)
     return status;
 }
 
-/*///uint8_t WiFiSpiClass::begin(const char* ssid, uint8_t key_idx, const char *key)
-{
-	uint8_t status = WL_IDLE_STATUS;
-	uint8_t attempts = WL_MAX_ATTEMPT_CONNECTION;
-
-	// set encryption key
-    if (WiFiSpiDrv::wifiSetKey(ssid, strlen(ssid), key_idx, key, strlen(key)) != WL_FAILURE)
-    {
-        // 
-	    do
-	    {
-		    delay(WL_DELAY_START_CONNECTION);
-		    status = WiFiSpiDrv::getConnectionStatus();
-	    }
-        while (((status == WL_IDLE_STATUS) || (status == WL_SCAN_COMPLETED) || (status == WL_DISCONNECTED)) && (--attempts > 0));
-   } else {
-	    status = WL_CONNECT_FAILED;
-   }
-   
-   return status;
-}*/
-
 /*
  * 
  */
@@ -138,7 +115,6 @@ uint8_t WiFiSpiClass::begin(const char* ssid, const char *passphrase)
     // SSID and passphrase for WPA connection
     if (WiFiSpiDrv::wifiSetPassphrase(ssid, strlen(ssid), passphrase, strlen(passphrase)) != WL_FAILURE)
     {
-      // TODO: Improve timing
         do
         {
             delay(WL_DELAY_START_CONNECTION);

@@ -173,7 +173,8 @@ int8_t WiFiSpiDrv::wifiSetNetwork(const char* ssid, uint8_t ssid_len)
 }
 
 /*
- * 
+ * Connects to AP with given parameters
+ * Returns: status - see getConnectionStatus()
  */
 uint8_t WiFiSpiDrv::wifiSetPassphrase(const char* ssid, const uint8_t ssid_len, const char *passphrase, const uint8_t len)
 {
