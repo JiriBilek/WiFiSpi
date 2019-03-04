@@ -79,8 +79,10 @@ void setup() {
     // Connect to WPA/WPA2 network. Change this line if using open network:
     status = WiFiSpi.begin(ssid, pass);
 
-    // wait 10 seconds for connection:
-    delay(10000);
+    if (status != WL_CONNECTED)
+        Serial.println("Cannot connect to AP.");
+        // don't continue if connection failed
+        while (true);
   }
   Serial.println("Connected to wifi");
   printWifiStatus();
