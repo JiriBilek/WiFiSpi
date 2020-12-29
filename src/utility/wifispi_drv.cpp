@@ -533,7 +533,7 @@ void WiFiSpiDrv::softReset(void) {
     EspSpiDrv::sendCmd(SOFTWARE_RESET_CMD, PARAM_NUMS_0);
 
     // Wait for reply
-    uint8_t _dataLen = WL_FW_VER_LENGTH;
+//    uint8_t _dataLen = WL_FW_VER_LENGTH;
     if (!EspSpiDrv::waitResponseCmd(SOFTWARE_RESET_CMD, PARAM_NUMS_0, NULL, NULL))
     {
         WARN(FPSTR(ERROR_WAITRESPONSE));

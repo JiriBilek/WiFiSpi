@@ -371,7 +371,7 @@ public:
      */
     uint8_t crc8(uint8_t *buffer, uint8_t bufLen)
     {
-        const static uint8_t POLY = 0x07;
+//        const static uint8_t POLY = 0x07;
 
         static const uint8_t PROGMEM tableLow[] = { 0x00, 0x07, 0x0E, 0x09, 0x1C, 0x1B, 0x12, 0x15, 
                                                     0x38, 0x3F, 0x36, 0x31, 0x24, 0x23, 0x2A, 0x2D };
