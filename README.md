@@ -209,6 +209,12 @@ Sends the buffer to the network. Returns number of bytes transmitted.
 - **size_t write(const char *str)**
 Sends the character string to the network. Returns number of bytes transmitted.
 
+- **IPAddress remoteIP()**
+Returns the IP address of the host who sent the current incoming packet. When there is no incoming connection returns 0.0.0.0.
+ 
+- **uint16_t remotePort()**
+Returns the port of the host who sent the current incoming packet. When there is no incoming connection returns 0.
+
 ### WiFiSpiServer
 
 The library has a pool of 4 sockets and after exhausting all the sockets no more connection is available. Therefore it is important to close the socket (i. e. stop the server) when it is no longer used. This version of the library is further constrained to one client connection per server.
