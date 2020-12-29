@@ -232,3 +232,31 @@ uint8_t WiFiSpiClient::verifySSL(uint8_t* fingerprint, const char *host) {
 
     return ServerSpiDrv::verifySSLClient(_sock, fingerprint, host);
 }
+
+/*
+ * 
+ */
+IPAddress WiFiSpiClient::remoteIP()
+{
+    uint8_t _remoteIp[4];
+    uint16_t _remotePort;
+
+    if (WiFiSpiDrv::getRemoteData(_sock, _remoteIp, &_remotePort))
+        return IPAddress(_remoteIp);
+    else
+        return IPAddress(0UL);
+}
+
+/*
+ * 
+ */
+uint16_t WiFiSpiClient::remotePort()
+{
+    uint8_t _remoteIp[4];
+    uint16_t _remotePort;
+
+    if (WiFiSpiDrv::getRemoteData(_sock, _remoteIp, &_remotePort))
+        return _remotePort;
+    else
+        return 0;
+}
