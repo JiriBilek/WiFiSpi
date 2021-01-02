@@ -7,6 +7,11 @@ The library allows Arduino to be client or server on the WiFi network.
 
 ## News
 
+#### 2021-01-02
+
+Fixed a bug with closing server connection when closing asynchronously opened another client.
+Changed deprecated boolean type to bool. 
+
 #### 2019-02-18
 
 Added SSL connection to WiFiClient class. Added verifySSL function.
