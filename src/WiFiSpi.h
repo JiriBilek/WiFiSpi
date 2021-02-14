@@ -310,6 +310,10 @@ public:
     static uint8_t checkProtocolVersion();
 
     /*
+    */
+    static uint8_t setSSLFingerprint(uint8_t* fingerprint);
+
+    /*
      * The following classes need r/w access to private arrays
      */
     friend class WiFiSpiClient;

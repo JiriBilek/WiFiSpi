@@ -33,7 +33,7 @@ extern "C" {
 }
 
 // Protocol version
-const char *WiFiSpiClass::protocolVer = "0.2.4";
+const char *WiFiSpiClass::protocolVer = "0.2.5";
 
 // Hardware reset pin
 int8_t WiFiSpiClass::hwResetPin = -1;
@@ -368,6 +368,15 @@ void WiFiSpiClass::hardReset(void)
     pinMode(hwResetPin, OUTPUT);
 
     espSpiProxy.hardReset(hwResetPin);
+}
+
+/*
+ *
+ */
+
+uint8_t WiFiSpiClass::setSSLFingerprint(uint8_t* fingerprint)
+{
+    return WiFiSpiDrv::setSSLFingerprint(fingerprint);
 }
 
 
