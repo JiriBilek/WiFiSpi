@@ -82,28 +82,23 @@ void setup() {
   Serial.println("Connected to wifi");
   printWifiStatus();
 
+  // Set the server certificate SHA-1 fingerprint
+  // Please check the correctness of the fingerprint - this certificate expires on 12-26-2021
+  uint8_t fingerprint[] = {0x0A,0x28,0xA6,0xEB,0x17,0x6E,0xA9,0xCC,0x59,0x6F,
+                           0x4C,0x73,0xFD,0x89,0x7E,0xFB,0xD3,0x2D,0xCA,0x2A};
+  WiFiSpi.setSSLFingerprint(fingerprint);
+
   Serial.println("\nStarting connection to server...");
   // if you get a connection, report back via serial:
   if (client.connectSSL(server, 443)) {
     Serial.println("connected to server");
     
-    // Verify the server certificate
-    uint8_t fingerprint[] = {0x7B,0xB6,0x98,0x38,0x69,0x70,0x36,0x3D,0x29,0x19,
-                             0xCC,0x57,0x72,0x84,0x69,0x84,0xFF,0xD4,0xA8,0x89};
-    uint8_t vrfy = client.verifySSL(fingerprint, "www.example.com");
-    if (vrfy == 1) {
-        Serial.println("Connection verified");
-        // Make a HTTP request:
-        // Note: client.print() is transmitting one char per a message that is awfully wasting the SPI bus bandwidth
-        //       client.write(char*) is optimized and has minimum overhead
-        client.write("GET / HTTP/1.1\r\n"
-                     "Host: www.example.com\r\n"
-                     "Connection: close\r\n\r\n");
-    }
-    else {
-        Serial.println("Something's wrong, server certificate not verified");
-        client.stop();
-    }
+    // Make a HTTP request:
+    // Note: client.print() is transmitting one char per a message that is awfully wasting the SPI bus bandwidth
+    //       client.write(char*) is optimized and has minimum overhead
+    client.write("GET / HTTP/1.1\r\n"
+                 "Host: www.example.com\r\n"
+                 "Connection: close\r\n\r\n");
   }
 }
 
