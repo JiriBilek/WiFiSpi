@@ -55,6 +55,7 @@ typedef enum {
         WL_CONNECTED,
         WL_CONNECT_FAILED,
         WL_CONNECTION_LOST,
+		WL_WRONG_PASSWORD,
         WL_DISCONNECTED
 } wl_status_t;
 
