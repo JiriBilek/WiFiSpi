@@ -156,6 +156,14 @@ Returns the encryption type of the discovered network during the network scan. T
 - **int32_t RSSI(uint8_t networkItem)**
 Returns the signal strength in dBm of the discovered network during the network scan. The returned value is signed 32 bit integer. Parameter *networkItem* is the index into a discovered networks array.
 
+----------
+
+- **uint8_t setSSLFingerprint(uint8_t\* fingerprint)**
+Loads server certificate SHA-1 fingerprint into BearSSL engine. Subsequent connections are checked against
+this fingerprint. The fingerprint is an array of type *uint8_t[20]*.
+Note that without checking the fingerprint the TLS connection is insecure and prone to MITM attacks.
+
+
 ### WiFiSpiClient
 
 The WiFiSpiClient class performs data communication between your program and the remote site. It is used not only with client connections (where Arduino acts as a client) but also in server connections (sending responses to a web request) and udp connections.
@@ -174,10 +182,10 @@ Connects to the specified IP address and port. Returns a value from enum *wl_tcp
 Connects to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
 - **int connectSSL(IPAddress ip, uint16_t port)**
-Connects using SSL to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+Connects using SSL to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). If there is a previously loaded certificate fingerprint, the server certificate is checked against the fingerprint, otherwise the connection is insecure (prone to MITM attacks).
 
 - **int connectSSL(const char \*host, uint16_t port)**
-Connects using SSL to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+Connects using SSL to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). If there is a previously loaded certificate fingerprint, the server certificate is checked against the fingerprint, otherwise the connection is insecure (prone to MITM attacks).
 
 - **uint8_t connected()**
 Returns connection state as a logic value: 1 = connected, 0 = error. Note that the connection could be closed by a server when ESP8266 reads all data in its internal buffer although the master haven't read it yet.
@@ -190,10 +198,6 @@ Stops the client (disconnects from the remote server if still connected) and fre
 
 - **operator bool()**
 Returns true when the client is associated with a socket.
-
-- **int verifySSL(uint8_t\* fingerprint, const char \*host)**
-Verifies server SSL certificate for a fingerprint and domain name. The fingerprint is a 20 byte SHA-1 value certificate fingerprint. It can be read e.g. from web browser examinig the certificate. The parameter *fingerprint* is a 20 byte uint8_t array, it is *not* a character string. The parameter *host* is the domain name of the server we are connecting to.
-
 
 ----------
 
@@ -286,7 +290,7 @@ Returns the number of bytes remaining in the current packet.
  - **int read()**
 Reads a single byte from the current packet.
 
-- **int read(unsigned char\* buffer, size_t len) **
+- **int read(unsigned char\* buffer, size_t len)**
 - **int read(char\* buffer, size_t len)**
 Reads up to *len* bytes from the current packet and places them into *buffer*. Returns the number of bytes read, or 0 if none are available or an error occurred.
     
@@ -328,6 +332,7 @@ For some debugging information on Serial output uncomment line 23 (#define _DEBU
 ## ToDo and Wish Lists
 
 - more SPI protocol optimization
+- TLS: loading and checking server certificate chain instead of the fingerprint
 
 ## Credits
 
