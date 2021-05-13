@@ -62,25 +62,25 @@ All the important defines are in file **config.h**. The user can comment and/or 
 
 After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically instantiated. Use the variable to perform the following calls.
 
-- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI, int8_t hwResetPin = -1)**
+- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass \*in_spi = &SPI, int8_t hwResetPin = -1)**
 Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter *max_speed* limits the SPI speed. Tests on STM32F1 show that speeds as high as 9 Mhz are usable. The parameter *in_spi* allows to use another SPI port (if there are more present in the MCU). Refer to a particular implementation of SPIClass. The optional parameter *hwResetPin* defines the pin which is connected to reset pin on ESP8266 for hardware reset. Then this parameter is present,  master resets the ESP8266 on start.
 
-- **char* firmwareVersion()**
+- **char\* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.
 
-- **char* protocolVersion()**
+- **char\* protocolVersion()**
 Returns version of protocol the ESP8266 firmware operates with.
 
-- **char* masterProtocolVersion()**
+- **char\* masterProtocolVersion()**
 Returns version of protocol the master runs.
 
 - **uint8_t checkProtocolVersion()**
 Checks master and ESP protocol version. If they match, returns 1, otherwise 0.
 
-- **uint8_t begin(const char* ssid)**
+- **uint8_t begin(const char\* ssid)**
 Connects to an open (unencrypted) wifi. Returns a value from *wl_status_t* enum(when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
-- **uint8_t begin(const char* ssid, const char *passphrase)**
+- **uint8_t begin(const char\* ssid, const char \*passphrase)**
 Connects to a WPA/WPA2 encrypted wifi. Returns status from *wl_status_t* type (when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
 - **int disconnect(void)**
@@ -89,13 +89,13 @@ Disconnects from the WiFi network. Returns a value from *wl_status_t* enum(when 
 - **uint8_t status()**
 Returns the connection status of the WiFi interface. The returned value is one of the enum *wl_status_t*.
 
-- **int8_t hostByName(const char* aHostname, IPAddress& aResult)**
+- **int8_t hostByName(const char\* aHostname, IPAddress& aResult)**
 Resolves the given hostname to an IP address. Returns 1 for Ok else error code.
 
- - **void softReset(void)**
+- **void softReset(void)**
  Sends reset command to ESP8266. The ESP8266 then resets itself. The command is performed only if the connection between the host and ESP8266 is not broken. 
 
- - **void hardReset(void)**
+- **void hardReset(void)**
  Resets the ESP8266. One pin on master unit must be wired to reset pin on ESP8266. The pin is defined in **init** function.
 
 ----------
