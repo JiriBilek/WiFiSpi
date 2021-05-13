@@ -90,14 +90,15 @@ void setup() {
   }
 
   // attempt to connect to Wifi network
-  int status = WL_IDLE_STATUS;     // the Wifi radio's status
+  int status;     // the Wifi radio's status
 
-  while (status != WL_CONNECTED) {
+  do {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
     // Connect to WPA/WPA2 network
     status = WiFiSpi.begin(ssid, pass);
-  }
+  } while (status != WL_CONNECTED);
+  
   Serial.println("Connected to wifi");
   
   // Connect to mqtt broker

@@ -62,25 +62,25 @@ All the important defines are in file **config.h**. The user can comment and/or 
 
 After including *WiFiSpi.h* header the *WiFiSpi* variable is automatically instantiated. Use the variable to perform the following calls.
 
-- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass *in_spi = &SPI, int8_t hwResetPin = -1)**
+- **void init(int8_t pin, uint32_t max_speed = 0, SPIClass \*in_spi = &SPI, int8_t hwResetPin = -1)**
 Initializes the library and the Arduino SPI interface. Must be called on beginning of the communication. The parameter *max_speed* limits the SPI speed. Tests on STM32F1 show that speeds as high as 9 Mhz are usable. The parameter *in_spi* allows to use another SPI port (if there are more present in the MCU). Refer to a particular implementation of SPIClass. The optional parameter *hwResetPin* defines the pin which is connected to reset pin on ESP8266 for hardware reset. Then this parameter is present,  master resets the ESP8266 on start.
 
-- **char* firmwareVersion()**
+- **char\* firmwareVersion()**
 Returns version of custom firmware loaded into ESP8266.
 
-- **char* protocolVersion()**
+- **char\* protocolVersion()**
 Returns version of protocol the ESP8266 firmware operates with.
 
-- **char* masterProtocolVersion()**
+- **char\* masterProtocolVersion()**
 Returns version of protocol the master runs.
 
 - **uint8_t checkProtocolVersion()**
 Checks master and ESP protocol version. If they match, returns 1, otherwise 0.
 
-- **uint8_t begin(const char* ssid)**
+- **uint8_t begin(const char\* ssid)**
 Connects to an open (unencrypted) wifi. Returns a value from *wl_status_t* enum(when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
-- **uint8_t begin(const char* ssid, const char *passphrase)**
+- **uint8_t begin(const char\* ssid, const char \*passphrase)**
 Connects to a WPA/WPA2 encrypted wifi. Returns status from *wl_status_t* type (when connected returns WL_CONNECTED). Establishing of the connection may last several seconds.
 
 - **int disconnect(void)**
@@ -89,13 +89,13 @@ Disconnects from the WiFi network. Returns a value from *wl_status_t* enum(when 
 - **uint8_t status()**
 Returns the connection status of the WiFi interface. The returned value is one of the enum *wl_status_t*.
 
-- **int8_t hostByName(const char* aHostname, IPAddress& aResult)**
+- **int8_t hostByName(const char\* aHostname, IPAddress& aResult)**
 Resolves the given hostname to an IP address. Returns 1 for Ok else error code.
 
- - **void softReset(void)**
+- **void softReset(void)**
  Sends reset command to ESP8266. The ESP8266 then resets itself. The command is performed only if the connection between the host and ESP8266 is not broken. 
 
- - **void hardReset(void)**
+- **void hardReset(void)**
  Resets the ESP8266. One pin on master unit must be wired to reset pin on ESP8266. The pin is defined in **init** function.
 
 ----------
@@ -119,7 +119,7 @@ Changes IP configuration, sets primary DNS server IP address.
 - **bool setDNS(IPAddress dns_server1, IPAddress dns_server2)**
 Changes IP configuration, sets primary and secondary DNS server IP addresses.
 
-- **uint8_t* macAddress(uint8_t* mac)**
+- **uint8_t\* macAddress(uint8_t\* mac)**
 Returns MAC address value of the WiFi interface. The MAC address is copiend to the array *mac* and also returned as a pointer to this array. The array size must be at least 6 bytes.
 
 - **IPAddress localIP()**
@@ -131,10 +131,10 @@ Returns interface subnet mask value.
 - **IPAddress gatewayIP()**
 Returns interface gateway address value.
 
-- **char* SSID()**
+- **char\* SSID()**
 Returns the current SSID associated with the network.
 
-- **uint8_t* BSSID()**
+- **uint8_t\* BSSID()**
 Returns the current BSSID associated with the network. It is in fact the MAC address of the Access Point. Returns a pointer to byte array of 6 byte length.
 
 - **int32_t RSSI()**
@@ -147,7 +147,7 @@ Returns the currect RSSI (signal strength in dBm) as a signed value.
 - **int8_t scanNetworks()**
 Scans the WiFi network. Returns the number of networks found or error value (WL_FAILURE). The call may last several seconds.
 
-- **char* SSID(uint8_t networkItem)**
+- **char\* SSID(uint8_t networkItem)**
 Returns the current SSID associated with the discovered network during the network scan. Parameter *networkItem* is the index into a discovered networks array.
 
 - **uint8_t	encryptionType(uint8_t networkItem)**
@@ -155,6 +155,14 @@ Returns the encryption type of the discovered network during the network scan. T
 
 - **int32_t RSSI(uint8_t networkItem)**
 Returns the signal strength in dBm of the discovered network during the network scan. The returned value is signed 32 bit integer. Parameter *networkItem* is the index into a discovered networks array.
+
+----------
+
+- **uint8_t setSSLFingerprint(uint8_t\* fingerprint)**
+Loads server certificate SHA-1 fingerprint into BearSSL engine. Subsequent connections are checked against
+this fingerprint. The fingerprint is an array of type *uint8_t[20]*.
+Note that without checking the fingerprint the TLS connection is insecure and prone to MITM attacks.
+
 
 ### WiFiSpiClient
 
@@ -170,14 +178,14 @@ Creates client for open server connection. Called by the library in when server 
 - **int connect(IPAddress ip, uint16_t port)**
 Connects to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
-- **int connect(const char *host, uint16_t port)**
+- **int connect(const char \*host, uint16_t port)**
 Connects to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED).
 
 - **int connectSSL(IPAddress ip, uint16_t port)**
-Connects using SSL to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+Connects using SSL to the specified IP address and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). If there is a previously loaded certificate fingerprint, the server certificate is checked against the fingerprint, otherwise the connection is insecure (prone to MITM attacks).
 
-- **int connectSSL(const char *host, uint16_t port)**
-Connects using SSL to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). No authentification checks are performed, recommended to use *verifySSL* function to check the server certificate.
+- **int connectSSL(const char \*host, uint16_t port)**
+Connects using SSL to the specified host and port. Returns a value from enum *wl_tcp_state* (for open connection returns ESTABLISHED). If there is a previously loaded certificate fingerprint, the server certificate is checked against the fingerprint, otherwise the connection is insecure (prone to MITM attacks).
 
 - **uint8_t connected()**
 Returns connection state as a logic value: 1 = connected, 0 = error. Note that the connection could be closed by a server when ESP8266 reads all data in its internal buffer although the master haven't read it yet.
@@ -191,10 +199,6 @@ Stops the client (disconnects from the remote server if still connected) and fre
 - **operator bool()**
 Returns true when the client is associated with a socket.
 
-- **int verifySSL(uint8_t* fingerprint, const char *host)**
-Verifies server SSL certificate for a fingerprint and domain name. The fingerprint is a 20 byte SHA-1 value certificate fingerprint. It can be read e.g. from web browser examinig the certificate. The parameter *fingerprint* is a 20 byte uint8_t array, it is *not* a character string. The parameter *host* is the domain name of the server we are connecting to.
-
-
 ----------
 
 - **int available()**
@@ -203,7 +207,7 @@ Returns available bytes in the input queue (data received from the network) for 
 - **int read()**
 Reads one byte from the input queue. Returns -1 for an error.
 
-- **int read(uint8_t *buf, size_t size)**
+- **int read(uint8_t \*buf, size_t size)**
 Reads *size* bytes into an input buffer *buf*. Returns 0 on success, -1 on error or insufficient data in the input queue.
 
 - **int peek()**
@@ -212,10 +216,10 @@ Peeks into the input queue and returns the first byte in the queue. On error ret
 - **size_t write(uint8_t)**
 Sends one byte to the network. Returns 1 on success, 0 on error.
 
-- **size_t write(const void *buf, size_t size)**
+- **size_t write(const void \*buf, size_t size)**
 Sends the buffer to the network. Returns number of bytes transmitted.
 
-- **size_t write(const char *str)**
+- **size_t write(const char \*str)**
 Sends the character string to the network. Returns number of bytes transmitted.
 
 - **IPAddress remoteIP()**
@@ -240,14 +244,14 @@ Returns the server's status. Return 1 for opened connection, 0 for closed or err
 - **void stop()**
 Stops the listener, stops the associated client (if any) and frees the socket.
 
-- **WiFiSpiClient available(uint8_t* status = NULL)**
+- **WiFiSpiClient available(uint8_t\* status = NULL)**
 Returns WiFiSpiClient instance for communication with remote client. Returns opened WiFiSpiClient instance when there is a remote client connected. When there is no connection the function returns closed client. Use the WiFiSpiClient's bool operator on the return value to test it.
 When pointer *status* is not null, loads it with the remote client's status.
   
 - **size_t write(uint8_t)**
 Writes a byte to the output queue. Returns 1 on success, 0 on error.
 
-- **size_t write(const uint8_t *buf, size_t size)**
+- **size_t write(const uint8_t \*buf, size_t size)**
 Writes a buffer to the output queue. Returns number of bytes written.
 Note: transmitting data can be also achieved using a WiFiSpiClient object returned by the *WiFiSpiServer::available()* function.
 
@@ -274,7 +278,7 @@ Finishes the packet and sends it. Returns 1 if the packet was sent successfully,
 - **size_t write(uint8_t)**
 Writes a single byte into the packet. Returns 1 on sucesss, 0 on error.
   
-- **size_t write(const uint8_t *buffer, size_t size)**
+- **size_t write(const uint8_t \*buffer, size_t size)**
 Writes *size* bytes from buffer into the packet. Returns number of bytes written, on error returns 0.
  
 - **int parsePacket();**
@@ -286,8 +290,8 @@ Returns the number of bytes remaining in the current packet.
  - **int read()**
 Reads a single byte from the current packet.
 
-- **int read(unsigned char* buffer, size_t len) **
-- **int read(char* buffer, size_t len)**
+- **int read(unsigned char\* buffer, size_t len)**
+- **int read(char\* buffer, size_t len)**
 Reads up to *len* bytes from the current packet and places them into *buffer*. Returns the number of bytes read, or 0 if none are available or an error occurred.
     
 - **int peek()**
@@ -328,6 +332,7 @@ For some debugging information on Serial output uncomment line 23 (#define _DEBU
 ## ToDo and Wish Lists
 
 - more SPI protocol optimization
+- TLS: loading and checking server certificate chain instead of the fingerprint
 
 ## Credits
 

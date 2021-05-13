@@ -557,6 +557,33 @@ const char* WiFiSpiDrv::getProtocolVersion()
     return protocolVersion;
 }
 
+uint8_t WiFiSpiDrv::setSSLFingerprint(uint8_t *fingerprint)
+{
+    // Send Command
+    if (fingerprint == nullptr)  // clear the saved fingerprint
+    {
+        EspSpiDrv::sendCmd(SET_SSL_FINGERPRINT_CMD, PARAM_NUMS_0);
+    }
+    else  // set the fingerprint
+    {
+        EspSpiDrv::sendCmd(SET_SSL_FINGERPRINT_CMD, PARAM_NUMS_1);
+        EspSpiDrv::sendParam(fingerprint, 20);
+        EspSpiDrv::endCmd();
+    }
+
+    // Wait for reply
+
+    uint8_t _data = 0;
+    uint8_t _dataLen = sizeof(_data);
+    if (!EspSpiDrv::waitResponseCmd(SET_SSL_FINGERPRINT_CMD, PARAM_NUMS_1, &_data, &_dataLen))
+    {
+        WARN(FPSTR(WiFiSpiDrv::ERROR_WAITRESPONSE));
+        _data = 0;
+    }
+
+    return _data;  // return value 1 means ok
+}
+
 
 WiFiSpiDrv wiFiSPIDrv;
 

@@ -295,6 +295,12 @@ public:
      */
     static const char* getProtocolVersion();
 
+    /*
+     * Sets or clears the certificate fingerprint for SSL connection
+     * fingerprint - SHA1 of server certificate - must be 20 bytes (not character string!)
+     */
+    static uint8_t setSSLFingerprint(uint8_t *fingerprint);
+
 };
 
 extern WiFiSpiDrv wiFiSpiDrv;

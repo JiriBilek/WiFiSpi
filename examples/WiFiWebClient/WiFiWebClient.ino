@@ -38,7 +38,6 @@
 char ssid[] = "yourNetwork";        // your network SSID (name)
 char pass[] = "secretPassword";     // your network password (use for WPA)
 
-int status = WL_IDLE_STATUS;
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
 //IPAddress server(93,184,216,34);  // numeric IP for www.example.com (no DNS)
@@ -73,17 +72,17 @@ void setup() {
   }
 
   // attempt to connect to Wifi network:
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network. Change this line if using open network:
-    status = WiFiSpi.begin(ssid, pass);
+  Serial.print("Attempting to connect to SSID: ");
+  Serial.println(ssid);
+  // Connect to WPA/WPA2 network. Change this line if using open network:
+  int status = WiFiSpi.begin(ssid, pass);
 
-    if (status != WL_CONNECTED)
-        Serial.println("Cannot connect to AP.");
-        // don't continue if connection failed
-        while (true);
+  if (status != WL_CONNECTED) {
+    Serial.println("Cannot connect to AP. Stop.");
+    // don't continue if connection failed
+    while (true);
   }
+  
   Serial.println("Connected to wifi");
   printWifiStatus();
 
