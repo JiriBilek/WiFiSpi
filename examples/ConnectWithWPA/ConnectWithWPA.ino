@@ -35,8 +35,6 @@
 char ssid[] = "yourNetwork";     // your network SSID (name)
 char pass[] = "secretPassword";  // your network password
 
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
-
 void setup() {
   //Initialize serial and wait for port to open:
   Serial.begin(9600);
@@ -61,18 +59,17 @@ void setup() {
   }
 
   // attempt to connect to Wifi network:
-  while (status != WL_CONNECTED) {
+  int status;     // the Wifi radio's status
+
+  do {
     Serial.print("Attempting to connect to WPA SSID: ");
     Serial.println(ssid);
     // Connect to WPA/WPA2 network:
     status = WiFiSpi.begin(ssid, pass);
-
-    // wait 10 seconds for connection:
-    delay(10000);
-  }
+  } while (status != WL_CONNECTED);
 
   // you're connected now, so print out the data:
-  Serial.print("You're connected to the network");
+  Serial.println("You're connected to the network");
   printCurrentNet();
   printWifiData();
 }
