@@ -33,7 +33,7 @@ extern "C" {
 }
 
 // Protocol version
-const char *WiFiSpiClass::protocolVer = "0.2.5";
+const char *WiFiSpiClass::protocolVer = "0.3.0";
 
 // Hardware reset pin
 int8_t WiFiSpiClass::hwResetPin = -1;

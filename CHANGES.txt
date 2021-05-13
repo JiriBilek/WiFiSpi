@@ -1,3 +1,6 @@
+0.3.0 (2021-13-05)
+  * BearSSL engine, protocol 0.3.0
+  * UDP Multicast support
 0.2.3 (2019-02-18)
   * SSL Client connection, verifySSL function, protocol 0.2.3
 0.2.0 (2019-01-27)
